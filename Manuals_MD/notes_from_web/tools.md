@@ -1,10 +1,16 @@
 # python
 
+**基本指令**
+
+```shell
+python --version  # 查看版本
+update-alternatives --list python  # 查看可切换的版本
+update-alternatives --config python  # 切换版本
+```
+
 ## 虚拟环境工具[Anaconda.org](https://anaconda.org/)
 
 官网下载安装：[Anaconda | Anaconda Distribution](https://www.anaconda.com/products/distribution)
-
-
 
 #### 基本指令
 
@@ -66,11 +72,19 @@ Jupyter Notebook是基于网页的用于交互计算的应用程序。其可被�
 
 [PyCharm配置数据库出现 No data sources are configured to run this SQL and provide advanced code assis... - 简书 (jianshu.com)](https://www.jianshu.com/p/77ce95b2bf0e)
 
+```shell
+source .virtualenvs/my_project/bin/activate  # 在Linux使用pycharm架构下的虚拟环境
+```
+
+
+
 ## PIP
 
 ```bash
 # 使用pip安装完包后，只需再执行一次命令pip install xx，就会显示安装路径
+pip install django_celery_beat -i https://pypi.tuna.tsinghua.edu.cn/simple/ # 临时使用清华源
 # 使用pip freeze命令可以查看安装了那些包
+pip list # 显示python下的包，进入python查看安装路径 import sys  sys.path
 ```
 
 ```python
@@ -78,6 +92,10 @@ Jupyter Notebook是基于网页的用于交互计算的应用程序。其可被�
 import pip._internal
 print(pip._internal.xxx.get_supported())
 ```
+
+查看 $PATH 变量，然后思考你平时运行的pip 的绝对路径是在哪里，执行 which pip 验证你的想法。
+
+思考 pip install --user 会把包安装到哪里，不加 --user 会把包安装到哪里，思考为什么不加 --user 需要 sudo 权限
 
 ## PIPX
 
@@ -434,8 +452,17 @@ sudo su postgres
 psql postgres #登入默认数据库
 # 登陆数据库简化版
 sudo -u postgres psql postgres
-# 登陆后修改密码
+
+
+```
+
+```postgresql
+'''登陆后修改密码'''
 \password postgres
+CREATE USER airlo000 WITH PASSWORD 'airlo000';
+\du
+ALTER USER airlo000 WITH SUPERUSER;
+\q
 ```
 
 ## MySQL
@@ -604,6 +631,75 @@ Git是分布式版本控制系统，可以记录文本文件的不同版本内�
 [(12条消息) Git入门_SuperAFeiDa的博客-CSDN博客](https://blog.csdn.net/Q1410136042/article/details/80481233)
 
 [(28条消息) Git安装教程（Windows11安装）_win11安装git_Charon's_Pluto的博客-CSDN博客](https://blog.csdn.net/weixin_42425618/article/details/123501071)
+
+**master->dev->'someone'->xxx**
+
+* master分支应该是十分稳定的，不能拿来做测试
+* master分支是主分支，应该与远程时刻保持同步
+* dev是团队开发分支，团队成员都需要在上面工作，也需要保持同步
+* bug分支
+* feature分支
+
+**GitLab权限（从低到高）**
+
+* Guest
+* Reporter
+* Developer
+* Maintainer
+* Owner
+
+**.gitignore**
+
+编写配置文件用于处理文件忽视
+
+#### 常用指令
+
+```shell
+git clone
+git status
+git branch xxx
+git branch -b xxx
+git checkout xxx
+git add xxx
+git commit -m 'xxx.'
+git checkout -b branch-name origin/branch-name # 在本地创建和远程分支对应的分支，已知远程分支情况
+git branch --set-upstream-to branch-name origin/branch-name # 本地分支和远程分支的链接关系没有创建时，使用此命令进行修复
+
+git remote # 查看远程库信息
+git remote -v # 查看远程库更详细信息
+
+git push -u origin master 
+git push origin xxx
+git merge xxxbranch # Fast Forwaed模式合并分支
+git merge --no-ff -m "xxx." xxxbranch # 以普通模式合并分支
+git log --graph --pretty=oneline --abbrev-commit
+git stash # save current working directory and index state
+git stash list
+git stash pop # 恢复工作现场内容并删除贮藏的临时现场
+git stash apply stash@{[index]} & git stash drop # 等效于git stash pop
+
+git pull # 远程抓取分支，并手动处理冲突
+git tag -a tag-name -m "message-context" commit-id # 打标签用-a指定标签名，用-m指定说明文字
+git show tagname # 查看标签信息
+git tag -d tag-name
+git push origin tag-name
+git push origin --tags # 一次性推送全部尚未推送到远程的本地标签
+
+git config --global alias.xx xxx # 配置别名
+git unstage xxx.file # 配置别名过后，用于撤回暂存区的修改 alias.unstage=reset HEAD
+```
+
+**清除此前的提交记录**
+
+```shell
+# 原主分支为master
+git checkout --orphan main
+git add ./
+git commit -m "something"
+git branch -D master
+git branch -m master
+git push -f origin master
+```
 
 #### git bash https 加速
 
@@ -776,6 +872,40 @@ sudo dpkg -r sunloginclient # 卸载
 
 # Vim
 
+#### vi操作
+
+:i 插入模式
+
+  跳到文本的最后一行：按“G”,即非开启大写情况下“shift+g”
+
+  跳到最后一行的最后一个字符 ： 先重复1的操作即按“G”，之后按“$”键，即“shift+4”。
+
+  跳到第一行的第一个字符：先按两次“g”，
+
+  跳转到当前行的第一个字符：在当前行按“0”。
+
+  按 ESC 退出 插入模式
+
+  :w 保存但不退出
+
+  :wq 保存并退出
+
+  :q 退出
+
+  :q! 强制退出，不保存
+
+  :e! 放弃所有修改，从上次保存文件开始再编辑命令历史
+
+```shell
+vim -c cmd file  # 在打开文件前，先执行指定的命令；
+vim -r file  # 恢复上次异常退出的文件；
+vim -R file  # 以只读的方式打开文件，但可以强制保存；
+vim -M file  # 以只读的方式打开文件，不可以强制保存；
+vim -y num file  # 将编辑窗口的大小设为num行；
+vim + file  # 从文件的末尾开始；
+vim +num file  # 从第num行开始；
+```
+
 [vim的复制粘贴(包括系统剪贴板) - 星朝 - 博客园 (cnblogs.com)](https://www.cnblogs.com/jpfss/p/9040561.html)
 
 https://blog.csdn.net/cumian9828/article/details/108154071
@@ -787,6 +917,19 @@ https://blog.csdn.net/cumian9828/article/details/108154071
 [vimrc自动化与状态栏配置](https://blog.csdn.net/l_changyun/article/details/98252459#_36)
 
 [An Intro to Vim for People Who Use Visual Studio Code](https://www.freecodecamp.org/news/vim-for-people-who-use-visual-studio-code/)
+
+#### 疑难杂症
+
+##### E212：无法打开并写入文件 解决办法
+
+保存文件时用: w ! sudo tee % ，tee 用于读取输入文件，同时保存%表示当前编辑文件
+
+按8，再按i，进入插入模式，输入=， 按esc进入命令模式，就会出现8个=。 
+这在插入分割线时非常有用，如30i+<esc>就插入了36个+组成的分割线。
+
+保存的时候可以指定路径：
+:write sth/file.cpp
+这样把文件保存到相对路径sth/下。你也可以使用绝对路径。
 
 ## Neovim+Coc.nvim
 

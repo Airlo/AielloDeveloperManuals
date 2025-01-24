@@ -21,6 +21,12 @@ Linux目录类似一个树，最顶层是其根目录
 * 内核以及引导程序所需要的文件，空间起始位置，1G-8G，ext4 挂载在 /boot
 * 挂载在/home，尽量大
 
+**特殊含义**
+
+./ 的含义 #当前目录，.是代表此目录本身，但是一般可以不写 所以cd ~/. 和cd ~ 和cd ~/效果是一样的
+~/ 的含义 #根目录，当前登录用户的用户主文件夹，而/root是root用户的主目录
+./.local 中 local 前面的那个 . 的含义 #.英文点号表示这是个隐藏文件或隐藏文件夹
+
 ### /bin \- 用户二进制文件
 
 存放最常用命令
@@ -116,13 +122,13 @@ network:
       gateway4: 192.168.1.1
       nameservers:
         addresses: [192.168.1.1]
-  wifis:                                                                      
-    wlan0:                                                                  
-      access-points:                                                      
-        HUAWEI:                                                           
-          auth:                                                           
-            key-management: psk                                           
-            password: "Your PassWord"                                          
+  wifis:           
+    wlan0:     
+      access-points:
+        HUAWEI: 
+          auth:
+            key-management: psk
+            password: "Your PassWord"
       dhcp4: yes      
       optional: true    
 ```
@@ -137,6 +143,10 @@ sudo netplan apply
 #### rc.local
 
 #### network
+
+#### profile
+
+系统环境变量配置文件
 
 interfaces
 
@@ -213,6 +223,15 @@ opt代表可选的。 包含从个别厂商的附加应用程序。 附加应用
 core_pattern文件涉及系统处理终端的错误抛出
 
 #### /proc/asound
+
+### /home - 用户目录
+
+```shell
+~/.bash_profile  # 这个是用户环境变量配置文件
+source ~/.bashrc  # 或者~/.zshrc 根据 echo $0 出来的shell确定
+# 通过 echo ~ 可以看到代表的用户目录
+echo ~  # 比如/home/aiello
+```
 
 
 
@@ -663,7 +682,7 @@ sudo lsof /var/lib/dpkg/lock-frontend
 # 3.安全删除锁定文件
 sudo rm /var/lib/apt/lists/lock
 sudo rm /var/cache/apt/archives/lock
-sudo rm /var/lib/dpkg/lock
+sudo rm /var/lib/dpkg/lock  # 强制解锁
 # 4.重新配置包
 sudo dpkg --configure -a
 # 5.检查锁占用
@@ -720,14 +739,34 @@ apt-get理论上是要求能够联网，但是如果制作了本地源，就不�
 
 
 
-##### 卸载
+##### 基本命令
+
+```shell
+sudo apt-get update  # 更新源
+sudo apt-get install package  # 安装包
+sudo apt-get remove package # 删除包
+sudo apt-cache search package  # 搜索软件包
+sudo apt-cache show package  # 获取包的相关信息，如说明、大小、版本等
+sudo apt-get install package –reinstall  # 重新安装包
+sudo apt-get -f install  # 修复安装
+sudo apt-get remove package –purge  # 删除包，包括配置文件等
+sudo apt-get build-dep package  # 安装相关的编译环境
+sudo apt-get upgrade  # 更新已安装的包
+sudo apt-get dist-upgrade  # 升级系统
+sudo apt-cache depends package  # 了解使用该包依赖那些包
+sudo apt-cache rdepends package  # 查看该包被哪些包依赖
+sudo apt-get source package  # 下载该包的源代码
+sudo apt-get clean && sudo apt-get autoclean  # 清理无用的包
+sudo apt-get check  # 检查是否有损坏的依赖
+apt --fix-broken install
+```
 
 #### dpkg
 
 Ubuntu软件包格式为deb，安装方法如下：
 
 ```shell
-sudo dpkg -i package.deb
+sudo dpkg -i package.deb  # 安装软件 命令行
 ```
 
 根据Ubuntu中文论坛上介绍，使用apt-get方法安装的软件，所有下载的deb包都缓存到了/var/cache/apt/archives目录下了，所以可以把常用的deb包备份出来，甚至做成ISO工具包、刻盘，以后安装Ubuntu时就可以在没有网络环境的情况下进行了。下面的命令是拷贝archives这个目录到/var/cache/apt/目录下，替换原有的archives
@@ -745,7 +784,17 @@ sudo apt-get update
 # sudo apt-get upgrade
 ```
 
+**其他命令**
 
+```shell
+dpkg -C  # 查找只有部分安装的软件包信息
+dpkg –compare-versions ver1 op ver2  # 比较同一个包的不同版本之间的差别
+dpkg –licence (or) dpkg –license  # 显示dpkg的Licence 命令行
+dpkg –version  # 显示dpkg的版本号
+dpkg -l package-name-pattern  # 搜索Deb 命令行
+dpkg -l  # 显示所有已经安装的Deb包，同时显示版本号以及简短说明
+dpkg -p package-name  # 显示包的具体信息
+```
 
 #### make install
 
@@ -782,6 +831,60 @@ python setup.py install  # 复制build/lib文件到用户指定的lib库
 [(13条消息) Ubuntu用tar备份与恢复方法_Richard_J的博客-CSDN博客](https://blog.csdn.net/jiangnan_java/article/details/12236331)
 
 http://t.zoukankan.com/sparkdev-p-10470144.html
+
+## 系统监控与守护
+
+#### 常用系统命令
+
+```shell
+htop  # 完整面板 需要apt install htop
+uname -a  # 查看系统版本/架构/内核/操作系统/CPU信息的linux系统信息命令
+head -n 1 /etc/issue # 查看操作系统版本，是数字1不是字母L
+cat /proc/cpuinfo # 查看CPU信息的linux系统信息命令 
+hostname # 查看计算机名的linux系统信息命令
+lsmod # 列出加载的内核模块
+env # 查看环境变量资源  
+cat /proc/loadavg  # 查看系统负载磁盘和分区
+df -h  # 查看各分区使用情况 
+du -sh  # 查看指定目录的大小
+free -m  # 显示内存分配与交换层分配
+grep MemTotal /proc/meminfo  # 查看内存总量 
+grep MemFree /proc/meminfo  # 查看空闲内存量
+uptime  # 查看系统运行时间、用户数、负载
+mount | column -t  # 查看挂接的分区状态 
+fdisk -l  # 查看所有分区 
+swapon -s  # 查看所有交换分区 
+
+rm -d [目录名]  # 删除一个空目录
+rmdir [目录名]  # 删除一个空目录
+rm -r [目录名]  # 删除一个非空目录
+rm [文件名]  # 删除文件
+sudo chmod u=r+w [filename].[filetype]  # 更改文件权限
+tar -xf xxx.tar  # 文件解压
+tar -zxvf XXX.tar.gz -C [指定目录]  # 安装tar.gz压缩包文件
+ps -ef | grep 'xxx'  # 把ps查询结果通过管道给grep查找包含特定字符串的进程
+ps -A  # 查看所有进程
+ps -ef  # 查看进程
+kill -s 9 1827  # 杀死1827这个进程
+pgrep firefox  # 直接根据Firefox查询进程的PID
+
+
+lspci | grep -i nvidia  # 查看pci连接设备型号 如nvidia显卡
+ubuntu-drivers devices  # 查看设备对应推荐驱动型号
+nvidia-smi  # 查看已安装的显卡驱动信息 需要安装nvidia显卡驱动
+lspci -tv  # 列出所有PCI设备 
+lsusb -tv  # 列出所有USB设备的linux系统信息命令 
+hdparm -i /dev/hda  # 查看磁盘参数(仅适用于IDE设备)
+dmesg | grep IDE  # 查看启动时IDE设备检测状况网络 
+ifconfig  # 查看所有网络接口的属性 
+iptables -L  # 查看防火墙设置 
+route -n  # 查看路由表 
+netstat -lntp  # 查看所有监听端口 
+netstat -antp  # 查看所有已经建立的连接
+sudo /etc/init.d/networking restart  # 更新网络
+```
+
+
 
 ## 效率加速
 
