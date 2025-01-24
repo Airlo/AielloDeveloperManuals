@@ -1,0 +1,13 @@
+[Unit]
+Description=Mdbook Service
+After=network.target
+
+[Service]
+Type=simple
+User=comac-pan
+Restart=on-failure
+RestartSec=5s
+ExecStart=/home/comac-pan/Developer_Manuals/computor-book/start_local_book.sh
+
+[Install]
+WantedBy=multi-user.target
