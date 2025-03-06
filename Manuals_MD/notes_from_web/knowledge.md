@@ -162,6 +162,21 @@ URL的格式由三部分组成：
 #### URI和URL之间的区别
 从上面的例子来看，你可能觉得URI和URL可能是相同的概念，其实并不是，URI和URL都定义了资源是什么，但URL还定义了该如何访问资源。URL是一种具体的URI，它是URI的一个子集，它不仅唯一标识资源，而且还提供了定位该资源的信息。URI 是一种语义上的抽象概念，可以是绝对的，也可以是相对的，而URL则必须提供足够的信息来定位，是绝对的。
 
+#### 跨源资源共享(CORS)
+
+或通俗地译为跨域资源共享，表示除了它自己以外的其他[源](https://developer.mozilla.org/zh-CN/docs/Glossary/Origin)（域、协议或端口），使得浏览器允许这些源访问加载自己的资源。跨源资源共享还通过一种机制来检查服务器是否会允许要发送的真实请求，该机制通过浏览器发起一个到服务器托管的跨源资源的“预检”请求。在预检中，浏览器发送的头中标示有 HTTP 方法和真实请求中会用到的头。
+##### 功能概述
+
+跨源资源共享标准新增了一组 [HTTP 标头](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers)字段，允许服务器声明哪些源站通过浏览器有权限访问哪些资源。另外，规范要求，对那些可能对服务器数据产生副作用的 HTTP 请求方法（特别是 [`GET`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/GET) 以外的 HTTP 请求，或者搭配某些 [MIME 类型](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/MIME_types)的 [`POST`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/POST) 请求），浏览器必须首先使用 [`OPTIONS`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/OPTIONS) 方法发起一个预检请求（preflight request），从而获知服务端是否允许该跨源请求。服务器确认允许之后，才发起实际的 HTTP 请求。在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（例如 [Cookie](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Cookies) 和 [HTTP 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication)相关数据）。
+
+CORS 请求失败会产生错误，但是为了安全，在 JavaScript 代码层面*无法*获知到底具体是哪里出了问题。你只能查看浏览器的控制台以得知具体是哪里出现了错误。
+
+##### 参考
+
+https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS
+
+
+
 # 人工智能与算法
 
 ## 机器学习算法
@@ -471,6 +486,36 @@ lambda结构体在没有捕获任何变量的时候是一个函数指针，但�
 临时对象就是无名对象，在语句行上直接用类生成一个对象，
 它的生命周期是在该行创建，又在该行销毁。
 对于一个已经销毁或行将销毁的对象，你拿到它的地址是没有意义的，所以编译器这个婆婆就武断的告诉你，别拿这个地址，你拿它没有用，不许拿，它是临时对象地址
+
+#### std标准
+
+##### C++11起
+
+* <random> std::discrete_distribution
+
+`std::discrete_distribution` 产生区间 `[0, n)` 上的随机整数，其中每个单独整数 `i` 的概率定义为 *w
+i/S* ，即第 `i` 个整数的*权重*除以所有 `n` 个权重的和。
+
+`std::discrete_distribution` 满足[*随机数分布* *(RandomNumberDistribution)* ](https://www.apiref.com/cpp-zh/cpp/named_req/RandomNumberDistribution.html)的所有要求。
+
+```c++
+#include <random>
+#include <vector>
+
+struct Point {};
+
+int main() {
+    std::mt19937 gen(std::random_device{}());
+
+    std::vector<double> chances{1.0, 2.0, 3.0};
+    // Initialize to same length.
+    std::vector<Point> points(chances.size());
+    // size_t is suitable for indexing.
+    std::discrete_distribution<std::size_t> d{chances.begin(), chances.end()};
+
+    auto sampled_value = points[d(gen)];
+}
+```
 
 
 

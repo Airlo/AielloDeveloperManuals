@@ -1,0 +1,12 @@
+# Let NetworkManager manage all devices on this system
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    enp2s0:
+      addresses: [192.168.9.10/24]    # 内网网卡不设置网关与DNS
+      dhcp4: no
+    enp3s0:
+      addresses: [192.168.10.10/24]
+      dhcp4: no
+

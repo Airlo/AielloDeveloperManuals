@@ -226,7 +226,7 @@ Rospy是ROS对python的主要接口，通过Rospy [API](https://so.csdn.net/so/s
 
 [(13条消息) 安装ubuntu18.04之后遇到的问题，及运行ROS-Academy-for-Beginners遇到的问题_刘英俊-的博客-CSDN博客](https://blog.csdn.net/liuyafan/article/details/88832859)
 
-
+[开发环境搭建 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/386542741)
 
 ## 运行错误
 

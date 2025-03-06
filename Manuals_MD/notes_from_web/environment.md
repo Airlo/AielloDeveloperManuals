@@ -556,6 +556,10 @@ export DISPLAY=:1
 
 客户端访问
 
+##### noVNC
+
+[ubuntu配置novnc通过web访问服务器](https://blog.csdn.net/happyday_d/article/details/100514110)
+
 ## Shell
 
 Shell（壳）是一种用C语言编写的程序（命令解释器），是连接用户和Unix/Linux内核的桥梁。 它的功能和windows的图形界面是一样的，只不过操作的形式不一样。   它通过建立文件的形式并行的运行多个程序，帮助用户完成很多工作；
@@ -867,6 +871,8 @@ ps -A  # 查看所有进程
 ps -ef  # 查看进程
 kill -s 9 1827  # 杀死1827这个进程
 pgrep firefox  # 直接根据Firefox查询进程的PID
+find ./* -type f -exec touch {} \;
+find ./* -type d -exec touch {} \;
 
 
 lspci | grep -i nvidia  # 查看pci连接设备型号 如nvidia显卡
@@ -1183,6 +1189,16 @@ delete partition override # 在当前磁盘分区下进行操作，删除当前�
 
 [(13条消息) 非华为PC安装华为电脑管家，免积分下载_宥小稚的博客-CSDN博客_华为电脑管家](https://blog.csdn.net/guanxiaozhi/article/details/118305167)
 
+## 错误代码
+
+#### 错误代码0x80070003
+
+[Windows 11 系统无法更新，错误代码：0x80070003](https://zhuanlan.zhihu.com/p/457775349)
+
+[windows11升级失败0x80070003错误某些更新文件缺失或出现问题。我们将尝试稍后重新下载更新](https://zhuanlan.zhihu.com/p/586955701)
+
+我是在windows10上遇到的问题,原因应该和双系统的引导有关,windows无法正常完成日常更新导致无法再进行更新,最终gg
+
 # WSL
 
 [全网最详细搭建Win10+WSL2+Ubuntu-22.04LTS+CUDA+Xfce4+noVNC个人工作站](https://blog.csdn.net/weixin_47145054/article/details/129865298)
@@ -1199,18 +1215,98 @@ delete partition override # 在当前磁盘分区下进行操作，删除当前�
 
 [Windows 11/10 WSL2 Ubuntu 20.04 下配置Cuda及Pytorch](https://blog.csdn.net/iwanvan/article/details/122119595)
 
-# PE OS 
+# 虚拟机
+
+## VirtualBox
+
+[Linux_Downloads – Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Linux_Downloads)
+
+[(28条消息) VirtualBox安装教程及使用（Windows）_邵奈一的博客-CSDN博客](https://blog.csdn.net/shaock2018/article/details/103598635)
+
+#### 安装系统
+
+[(28条消息) 【珍藏版】VirtualBox虚拟机安装Windows10，妈妈看了都会说好丝滑~_virtualbox win10_桃山楂的博客-CSDN博客](https://blog.csdn.net/weixin_53345287/article/details/124651143)
+
+[(28条消息) 使用VirtualBox安装Ubuntu虚拟机 - 完整教程-CSDN博客](https://blog.csdn.net/Amentos/article/details/127733864)
+
+#### 网络连接问题
+
+[(28条消息) Win10系统中VirtualBox网络桥接与主机直链同一wifi局域网互通并可连接外网_visual box 仅主机和桥接同时_神神的蜗牛的博客-CSDN博客](https://blog.csdn.net/zhouzme/article/details/80663432#:~:text=开始菜单 -> 设置 -> 网络和Internet -> 状态面板中 有个,wifi 连接 WLAN%2C 一个是刚刚设置的虚拟机的 host only 连接%2C 如下图%3A)
+
+[(28条消息) 当笔记本是无线连接网络时，如何正确配置virtualbox的上网问题_强哥之神的博客-CSDN博客](https://blog.csdn.net/qianggezhishen/article/details/45841723)
+
+## deepin_in_wine
+
+```bash
+https://packages.deepin.com/deepin/pool/non-free/d/deepin.com.wechat/deepin.com.wechat_2.6.2.31deepin0_i386.deb
+sudo dpkg -i deepin.com.wechat_2.6.2.31deepin0_i386.deb
+wget -qO- https://deepin-wine.i-m.dev/setup.sh | sudo sh # 启动wechat
+sudo apt-get install com.qq.weixin.deepin
+```
+
+```bash
+# 在ubuntu 上串口识别为ttyS0或ttyUSB0之类，在wine上识别不到，可用：
+sudo ln -s /dev/ttyUSB0 ~/.wine/dosdevices/COM1
+sudo chmod 777 ~/.wine/dosdevices/COM1
+```
+
+# PE OS
+
+U 盘启动盘制作工具
+
+[GitHub - ventoy/Ventoy: A new bootable USB solution.](https://github.com/ventoy/Ventoy)
 
 ## Ventoy
 
 Ventoy是一款国人开发的新一代多ISO启动引导程序，这款工具最大的优点就是无需格式化优盘，用户只需要将所需的ISO镜像文件拷贝至优盘中即可在Ventoy界面中选择自己想要的ISO镜像文件
 
-## Edgeless
+Ventoy 是一个制作可启动 U 盘的开源工具。 有了 Ventoy 你就无需反复地格式化 U 盘，你只需要把 ISO/WIM/IMG/VHD(x)/EFI 等类型的文件直接拷贝到 U 盘里面就可以启动了，无需其他操作。 你可以一次性拷贝很多个不同类型的镜像文件，Ventoy 会在启动时显示一个菜单来供你进行选择 (参见 截图)。 你还可以在 Ventoy 的界面中直接浏览并启动本地硬盘中的 ISO/WIM/IMG/VHD(x)/EFI 等类型的文件。
 
-## Win To Go
+[(22条消息) Ventoy主题美化，以及自行制作方法_寒墨茗殇的博客-CSDN博客](https://blog.csdn.net/qq_40591925/article/details/128659273)
+
+[(22条消息) 玩转系统|Ventoy – 免格式化，超简单的『多合一』系统启动盘制作神器_Jum朱的博客-CSDN博客_ventoy 数据持久化](https://blog.csdn.net/qq_22903531/article/details/128578416)
+
+**VHD BOOT HOST VOLUME NOT ENOUGH SPACE问题**
+
+解开VHD设置的静态存储后的总占用不得超过本身的存储容量
+
+[使用VHD開機(Boot from VHD)的錯誤狀況 - 蘇老碎碎唸 (askasu.idv.tw)](https://www.askasu.idv.tw/archives/2247)
+
+## Linux_to_go
+
+安装完成后，启动 VirtualBox 中的虚拟电脑，进入 ubuntu2004 操作系统，然后下载 vtoyboot 脚本，这一步是为了在系统中做一些处理，以支持 Ventoy 启动。
+
+[Releases · ventoy/vtoyboot (github.com)](https://github.com/ventoy/vtoyboot/releases)
+
+下载的是 vtoyboot.xxx.iso 文件，解压得到 vtoyboot.sh 脚本文件，然后以 root 权限执行里面的脚本 `sudo bash vtoyboot.sh` ，执行成功后关机。
+
+## Win_to_go
+
+通过virtualbox以专业模式创建windows虚拟机，并保存为vhd格式，通过插件让Ventoy加载
+
+[Release vhdimg v3.0 release · ventoy/vhdiso · GitHub](https://github.com/ventoy/vhdiso/releases/tag/v3.0)
+
+#### 疑难解答
+
+###### Q1. 因为硬件配置本身的原因使得无法安装系统如何解决
+
+虽然有更改注册表的方法在低配置的设备上通过安装，但是并不建议这么做，因为不适合的配置会引发后续的诸多问题。
+
+```powershell
+# 在进行镜像安装时，Win11 会提示“该电脑无法运行 Win11”。
+# 按 Shift+F10，打开命令行界面，输入 
+regedit 
+# 打开注册表，然后定位到 
+HKEY_LOCAL_MACHINE\SYSTEM\Setup
+# 创建一个名为“LabConfig”的项，接着在“LabConfig”下创建两个 DWORD 值(32位)：
+Key: BypassTPMChcek
+value: 00000001
+Key: BypassSecureBootCheck
+value: 00000001
+Key: BypassCPUCheck
+value: 1
+Key: BypassRAMCheck
+value: 1 
+```
 
 
-
-# Develop
-
-[开发环境搭建 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/386542741)

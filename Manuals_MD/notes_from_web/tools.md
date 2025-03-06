@@ -8,7 +8,7 @@ update-alternatives --list python  # 查看可切换的版本
 update-alternatives --config python  # 切换版本
 ```
 
-## 虚拟环境工具[Anaconda.org](https://anaconda.org/)
+## 虚拟环境工具 [Anaconda.org](https://anaconda.org/)
 
 官网下载安装：[Anaconda | Anaconda Distribution](https://www.anaconda.com/products/distribution)
 
@@ -24,12 +24,31 @@ conda env list
 conda activate ${your_env_name}
 # 退出当前环境
 conda deactivate
+# 创建环境
+conda create -n ${new_env_name} python=${python_version}
 # 复制环境,局限于conda install安装,跳过pip install安装部分
 conda create -n ${new_env_name} --clone ${now_env_name}
 # 导出环境(无法直接跨不同系统,起码win11到linux不行,需要把多余包删去)
 conda env export --name ${env_name} > environment.yaml 
 # 导入环境
 conda env create -f environment.yaml
+# 删除一个环境
+conda env remove -n ${one_env_name}
+```
+
+```shell
+# 查看conda下的包
+conda list
+# 安装包 或 安装特定版本的包
+conda install ${pkg_name}
+conda install ${pkg_name}=${pkg_version}
+# 卸载包
+conda remove ${pkg_name}
+# 更新包 或 更新所有包
+conda update ${pkg_name}
+conda update --all
+# 搜索包
+conda search ${search_term}
 ```
 
 conda环境跨平台迁移问题ResolvePackageNotFound
@@ -65,6 +84,20 @@ set-ExecutionPolicy RemoteSigned
 Jupyter Notebook是基于网页的用于交互计算的应用程序。其可被应用于全过程计算：开发、文档编写、运行代码和展示结果。
 
 使用[jupyter-themes](https://github.com/dunovank/jupyter-themes)来为jupyter notebook更改主题颜色(theme)：[ 更改jupyter notebook的主题颜色(theme) 包括pycharm_QZQmmmm的博客-CSDN博客_jupyter主题](https://blog.csdn.net/Techmonster/article/details/73382535)
+
+把conda环境添加到jupyter notebook
+
+```shell
+conda activate ${opt_env_name}
+pip install ipykernel
+python -m ipykernel install --name ${env_name_optional}
+# 查看已添加到jupyter notebook的kernel
+jupyter kernelspec list
+# 删除指定的kernel
+jupyter kernelspec remove ${kernel_name}
+```
+
+
 
 ## PyCharm
 
@@ -725,6 +758,13 @@ sudo systemctl start docker
 
 [目前国内可用Docker镜像源汇总（截至2024年11月）](https://cloud.tencent.com/developer/article/2459822)
 
+#### 跨平台
+
+conda的requirements.txt的导入导出在docker中使用,
+
+不使用conda list -e 来导出requirements.txt
+使用环境的导出导入，注意增加—no-builds参数来构建可以在docker中运行的依赖。
+
 ### 基本操作
 
 ```shell
@@ -1189,96 +1229,6 @@ bool isAbsolute = true;
 motion.angleInterpolation(names, angleLists, times, isAbsolute);
 ```
 
-# 虚拟机
-
-## VirtualBox
-
-[Linux_Downloads – Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Linux_Downloads)
-
-[(28条消息) VirtualBox安装教程及使用（Windows）_邵奈一的博客-CSDN博客](https://blog.csdn.net/shaock2018/article/details/103598635)
-
-#### 安装系统
-
-[(28条消息) 【珍藏版】VirtualBox虚拟机安装Windows10，妈妈看了都会说好丝滑~_virtualbox win10_桃山楂的博客-CSDN博客](https://blog.csdn.net/weixin_53345287/article/details/124651143)
-
-[(28条消息) 使用VirtualBox安装Ubuntu虚拟机 - 完整教程-CSDN博客](https://blog.csdn.net/Amentos/article/details/127733864)
-
-#### 网络连接问题
-
-[(28条消息) Win10系统中VirtualBox网络桥接与主机直链同一wifi局域网互通并可连接外网_visual box 仅主机和桥接同时_神神的蜗牛的博客-CSDN博客](https://blog.csdn.net/zhouzme/article/details/80663432#:~:text=开始菜单 -> 设置 -> 网络和Internet -> 状态面板中 有个,wifi 连接 WLAN%2C 一个是刚刚设置的虚拟机的 host only 连接%2C 如下图%3A)
-
-[(28条消息) 当笔记本是无线连接网络时，如何正确配置virtualbox的上网问题_强哥之神的博客-CSDN博客](https://blog.csdn.net/qianggezhishen/article/details/45841723)
-
-## deepin_in_wine
-
-```bash
-https://packages.deepin.com/deepin/pool/non-free/d/deepin.com.wechat/deepin.com.wechat_2.6.2.31deepin0_i386.deb
-sudo dpkg -i deepin.com.wechat_2.6.2.31deepin0_i386.deb
-wget -qO- https://deepin-wine.i-m.dev/setup.sh | sudo sh # 启动wechat
-sudo apt-get install com.qq.weixin.deepin
-```
-
-```bash
-# 在ubuntu 上串口识别为ttyS0或ttyUSB0之类，在wine上识别不到，可用：
-sudo ln -s /dev/ttyUSB0 ~/.wine/dosdevices/COM1
-sudo chmod 777 ~/.wine/dosdevices/COM1
-```
-
-# Ventoy
-
-U 盘启动盘制作工具
-
-[GitHub - ventoy/Ventoy: A new bootable USB solution.](https://github.com/ventoy/Ventoy)
-
-Ventoy 是一个制作可启动 U 盘的开源工具。 有了 Ventoy 你就无需反复地格式化 U 盘，你只需要把 ISO/WIM/IMG/VHD(x)/EFI 等类型的文件直接拷贝到 U 盘里面就可以启动了，无需其他操作。 你可以一次性拷贝很多个不同类型的镜像文件，Ventoy 会在启动时显示一个菜单来供你进行选择 (参见 截图)。 你还可以在 Ventoy 的界面中直接浏览并启动本地硬盘中的 ISO/WIM/IMG/VHD(x)/EFI 等类型的文件。
-
-[(22条消息) Ventoy主题美化，以及自行制作方法_寒墨茗殇的博客-CSDN博客](https://blog.csdn.net/qq_40591925/article/details/128659273)
-
-[(22条消息) 玩转系统|Ventoy – 免格式化，超简单的『多合一』系统启动盘制作神器_Jum朱的博客-CSDN博客_ventoy 数据持久化](https://blog.csdn.net/qq_22903531/article/details/128578416)
-
-**VHD BOOT HOST VOLUME NOT ENOUGH SPACE问题**
-
-解开VHD设置的静态存储后的总占用不得超过本身的存储容量
-
-[使用VHD開機(Boot from VHD)的錯誤狀況 - 蘇老碎碎唸 (askasu.idv.tw)](https://www.askasu.idv.tw/archives/2247)
-
-## Linux_to_go
-
-安装完成后，启动 VirtualBox 中的虚拟电脑，进入 ubuntu2004 操作系统，然后下载 vtoyboot 脚本，这一步是为了在系统中做一些处理，以支持 Ventoy 启动。
-
-[Releases · ventoy/vtoyboot (github.com)](https://github.com/ventoy/vtoyboot/releases)
-
-下载的是 vtoyboot.xxx.iso 文件，解压得到 vtoyboot.sh 脚本文件，然后以 root 权限执行里面的脚本 `sudo bash vtoyboot.sh` ，执行成功后关机。
-
-## Win_to_go
-
-通过virtualbox以专业模式创建windows虚拟机，并保存为vhd格式，通过插件让Ventoy加载
-
-[Release vhdimg v3.0 release · ventoy/vhdiso · GitHub](https://github.com/ventoy/vhdiso/releases/tag/v3.0)
-
-#### 疑难解答
-
-###### Q1. 因为硬件配置本身的原因使得无法安装系统如何解决
-
-虽然有更改注册表的方法在低配置的设备上通过安装，但是并不建议这么做，因为不适合的配置会引发后续的诸多问题。
-
-```powershell
-# 在进行镜像安装时，Win11 会提示“该电脑无法运行 Win11”。
-# 按 Shift+F10，打开命令行界面，输入 
-regedit 
-# 打开注册表，然后定位到 
-HKEY_LOCAL_MACHINE\SYSTEM\Setup
-# 创建一个名为“LabConfig”的项，接着在“LabConfig”下创建两个 DWORD 值(32位)：
-Key: BypassTPMChcek
-value: 00000001
-Key: BypassSecureBootCheck
-value: 00000001
-Key: BypassCPUCheck
-value: 1
-Key: BypassRAMCheck
-value: 1 
-```
-
 # 分布式系统工具
 
 ## Celery
@@ -1394,3 +1344,8 @@ https://gitcode.csdn.net/65eec48e1a836825ed79ccfc.html?dp_token=eyJ0eXAiOiJKV1Qi
 ### 高级二次开发
 
 https://zhuanlan.zhihu.com/p/515439135
+
+
+
+# Clonezilla
+

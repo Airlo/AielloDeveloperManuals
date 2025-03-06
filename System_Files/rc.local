@@ -12,6 +12,11 @@
 # By default this script does nothing.
 
 # docker start 8b02e9c74b43;
+ip link set enp2s0 mtu 9000;
+ip link set enp3s0 mtu 9000;
+sleep 30;
+# route add -net 192.168.10.0 netmask 255.255.255.0 gw 192.168.10.1
+# route add -net 0.0.0.0 netmask 0.0.0.0 gw 192.168.10.2
 echo core > /proc/sys/kernel/core_pattern
-ulimit -c unlimited
+# You can add "ulimit -c unlimited" into ~/.bashrc or other shell sh
 exit 0
