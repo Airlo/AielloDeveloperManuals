@@ -611,6 +611,29 @@ sh /root/datelog.sh
 
 
 
+## 内核 Kernel
+
+### 实时内核
+
+查看当前系统内核若有rt字样则代表使用的是实时内核
+
+[两种使ubuntu拥有RT内核的方法](https://zhuanlan.zhihu.com/p/675155576)
+
+上述教程中实时内核nivida驱动安装脚本链接到Apollo自驾平台开源的Apollo-kernel项目
+
+第一种为通过打补丁获得4个deb文件的安装方式；
+
+第二种为[https://xanmod.org/](https://link.zhihu.com/?target=https%3A//xanmod.org/)直接下载安装RT内核的方式
+
+## 第三方内核
+
+### Xanmod
+
+- XanMod 基于最新的稳定版 Linux 内核构建，旨在提供稳定、流畅且可靠的系统体验。
+- XanMod 由社区开发和维护，汲取了其他内核的优点，同时添加了独家优化，特别适合桌面、多媒体和游戏等场景，让系统更流畅、更灵敏。
+
+* 使用第三方内核需要一定的技术背景，并且稳定性可能不如 Linux 发行版的官方内核。
+
 ## 驱动与引导
 
 ### 引导疑难
@@ -629,6 +652,10 @@ sh /root/datelog.sh
 [(12条消息) ubuntu安装后分辨率只有一个选项_Joy-com的博客-CSDN博客_ubuntu分辨率只有一个选项](https://blog.csdn.net/u013764485/article/details/78007370)
 
 [(12条消息) ubuntu下安装NVIDIA显卡：问题解决记录_tiny_ten的博客-CSDN博客](https://blog.csdn.net/shenquanyue/article/details/82591846)
+
+#### Nouveau开源驱动
+
+Nouveau 是由社区开发的开源 NVIDIA 显卡驱动程序。它是 X.Org 的一部分，支持大多数 NVIDIA 显卡。Nouveau 的优点是开源且与 Linux 内核和其他开源组件集成良好，但它的缺点是性能通常不如 NVIDIA 官方驱动，并且不支持最新的 NVIDIA 显卡和一些像CUDA这样的高级功能。
 
 ### 声卡驱动
 
@@ -843,6 +870,8 @@ http://t.zoukankan.com/sparkdev-p-10470144.html
 ```shell
 htop  # 完整面板 需要apt install htop
 uname -a  # 查看系统版本/架构/内核/操作系统/CPU信息的linux系统信息命令
+uname -r  # 查看当前系统内核版本
+cat /boot/grub/grub.cfg | grep "menuentry 'Ubuntu"  # 查看系统所有可用内核版本
 head -n 1 /etc/issue # 查看操作系统版本，是数字1不是字母L
 cat /proc/cpuinfo # 查看CPU信息的linux系统信息命令 
 hostname # 查看计算机名的linux系统信息命令
@@ -1308,5 +1337,4 @@ value: 1
 Key: BypassRAMCheck
 value: 1 
 ```
-
 

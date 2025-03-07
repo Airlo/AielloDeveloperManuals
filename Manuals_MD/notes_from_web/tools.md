@@ -1349,3 +1349,39 @@ https://zhuanlan.zhihu.com/p/515439135
 
 # Clonezilla
 
+
+
+# Ollama
+
+#### 常用命令
+
+```shell
+# 查看当前Ollama的模型
+ollama list
+# 增量更新当前部署的模型
+ollama pull Qwen2-7B
+# 删除一个模型文件
+ollama rm Qwen2-7B
+# 复制一个模型
+ollama cp Qwen2-7B Qwen2-newModel
+```
+
+
+
+```shell
+# 安装NVIDIA Container Toolkit
+sudo apt install -y nvidia-container-toolkit
+# 在docker中使用GPU运行ollama
+docker run --gpus all -d -v /opt/ai/ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+# 下载所需模型
+docker exec -it ollama ollama run qwen:7b
+docker exec -it ollama ollama run llama3
+# 安装运行webui
+docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
+```
+
+[通过安装NVIDIA Container Toolkit在Docker中使用GPU](https://blog.csdn.net/ayiya_Oese/article/details/114397798)
+
+# Cursor
+
+cursor是一个集成了[GPT4](https://zhida.zhihu.com/search?content_id=252236639&content_type=Article&match_order=1&q=GPT4&zhida_source=entity)、[Claude 3.5](https://zhida.zhihu.com/search?content_id=252236639&content_type=Article&match_order=1&q=Claude+3.5&zhida_source=entity)等先进LLM的类[vscode](https://zhida.zhihu.com/search?content_id=252236639&content_type=Article&match_order=1&q=vscode&zhida_source=entity)的编译器，可以理解为在vscode中集成了AI辅助编程助手，从下图中的页面可以看出cursor的布局和vscode基本一致，并且cursor的使用操作也和vscode一致，包括extension下载、python编译器配置、远程服务器连接和settings等，如果你是资深vscode用户，那么恭喜你可以直接无缝衔接cursor。
