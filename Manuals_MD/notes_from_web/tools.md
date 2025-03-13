@@ -161,6 +161,23 @@ pipx run pycowsay moooo!
 
 
 
+## pyinstaller
+
+##### pyinstaller打包gardio问题
+
+* 原因1 pyinstaller 没有准确的识别出用于代码中gradio_client与gradio库的依赖项
+* 原因2 gradio库中的代码都是pyi文件，而pyinstaller 在打包时默认库中的都是pyc文件，故而需要修改spec文件
+
+```shell
+# 生成spec文件
+pyi-makespec --collect-data=gradio_client --collect-data=gradio ${python_file_name}.py
+# 在spec中添加对gradio的编译 module_collection_mode={ 'gradio': 'py',}
+# 修改后，删除掉目录下的build文件夹，执行 
+pyinstaller ${python_file_name}.spec
+```
+
+
+
 ## 疑难杂症
 
 [pip - No matching distribution found for 'package' in python wheel - Stack Overflow](https://stackoverflow.com/questions/35389875/no-matching-distribution-found-for-package-in-python-wheel)
@@ -426,15 +443,31 @@ DPFRHZ-68BKXJ-XCNKHQ-PBAH8K
 
 # DataBase
 
-## SQLite
+## RDBMS
+
+关系型数据库**（RDBMS, Relational Database Management System）**。它们均基于**关系模型**（Relational Model）设计，具备以下核心特征：
+
+1. **表格结构（Table-Based）**  
+   数据以**行和列**的二维表格形式存储，每个表代表一个实体（如用户、订单），列定义属性（如姓名、价格），行表示具体记录。
+
+2. **SQL 支持**  
+   使用**结构化查询语言（SQL）** 进行数据操作（如 `SELECT`, `INSERT`, `UPDATE`, `DELETE`），支持复杂的关联查询（`JOIN`）和聚合操作。
+
+3. **ACID 事务**  
+   支持事务的原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）、持久性（Durability），确保数据完整性。
+
+4. **预定义模式（Schema）**  
+   要求提前定义表结构（字段类型、约束），写入数据时需严格遵循模式。
+
+### SQLite
 
 [(12条消息) SQLiteStudio使用教程_未来无限的博客-CSDN博客_sqlitestudio](https://blog.csdn.net/qq_30725967/article/details/90205186)
 
 [SQL语句之查询（SELECT) - 西江逐月 - 博客园 (cnblogs.com)](https://www.cnblogs.com/fzxey/p/10883824.html#限定查询)
 
-### 安全性
+#### 安全性
 
-#### 设置密码
+##### 设置密码
 
 ```sql
 # 首先创建一个数据库连接
@@ -450,11 +483,11 @@ conn.ChangePassword("new_password");
 conn.ChangePassword(String.Empty);
 ```
 
-## Oracle
+### Oracle
 
 [Oracle数据库下载及安装图文操作步骤_oracle_脚本之家 (jb51.net)](https://www.jb51.net/article/32616.htm)
 
-## PostgreSQL
+### PostgreSQL
 
 数据库本体：https://www.postgresql.org/download/linux/ubuntu/
 
@@ -498,9 +531,55 @@ ALTER USER airlo000 WITH SUPERUSER;
 \q
 ```
 
-## MySQL
+### MySQL
 
 [Windows平台下安装MySQL数据库——最详细教程来啦！ - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/296292628#:~:text=Windows 下安装 MySQL 1 1.首先记住自己的压缩包解压在哪个文件目录（一定要记住MyS ... 2 2.然后进入计算机的环境变量,mysql 6 8.登陆旧密码登陆（第3步中的密码）： mysql -u ... 7 9.修改密码)
+
+## NoSQL
+
+NoSQL 用于超大规模数据的存储（例如谷歌或 Facebook 每天为他们的用户收集万亿比特的数据）。这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。
+
+NoSQL 在许多方面性能大大优于非关系型数据库的同时，往往也伴随一些特性的缺失。比较常见的是事务功能的缺失。
+
+**数据库事务正确执行的四个基本要素 ACID：**
+
+|      | 名称                  | 描述                                                         |
+| :--- | :-------------------- | ------------------------------------------------------------ |
+| A    | Atomicity（原子性）   | 一个事务中的所有操作，要么全部完成，要么全部不完成，不会在中间某个环节结束。事务在执行过程中发生错误，会被回滚到事务开始前的状态，就像这个事务从来没有执行过一样。 |
+| C    | Consistency（一致性） | 在事务开始之前和事务结束以后，数据库的完整性没有被破坏。     |
+| I    | Isolation（隔离性）   | 数据库允许多个并发事务同时对数据进行读写和修改的能力。隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。 |
+| D    | Durability（持久性）  | 事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。 |
+
+**关系型数据库（RDBMS）与非关系型数据库（NoSQL）的对比：**
+
+| 特性         | 关系型数据库（如上述四种）       | NoSQL（如MongoDB、Redis）      |
+| ------------ | -------------------------------- | ------------------------------ |
+| **数据模型** | 表格结构，严格模式               | 灵活模型（文档、键值、图等）   |
+| **扩展性**   | 垂直扩展（增强单机性能）         | 水平扩展（多节点分布式）       |
+| **事务支持** | 强ACID                           | 部分支持BASE模型（最终一致性） |
+| **适用场景** | 复杂查询、事务一致性要求高的场景 | 高吞吐、灵活模式、海量数据场景 |
+
+### redis
+
+Redis 是一个使用 ANSI C 编写的开源、支持网络、基于内存、可选持久性的键值对存储数据库。Redis 是目前最流行的键值对存储数据库之一。
+
+最佳应用场景：适用于数据变化快且数据库大小可遇见（适合内存容量）的应用程序。
+
+例如：股票价格、数据分析、实时数据搜集、实时通讯。
+
+## 数据库连接池
+
+对于一个简单的数据库应用，由于对于数据库的访问不是很频繁。这时可以简单地在需要访问数据库时，就新创建一个连接，用完后就关闭它，这样做也不会带来什么明显的性能上的开销。但是对于一个复杂的数据库应用，情况就完全不同了。频繁的建立、关闭连接，会极大的减低系统的性能，因为对于连接的使用成了系统性能的瓶颈。
+
+**连接复用**：通过建立一个[数据库连接池](https://zhida.zhihu.com/search?content_id=184888462&content_type=Article&match_order=1&q=数据库连接池&zhida_source=entity)以及一套连接使用管理策略，使得一个数据库连接可以得到高效、安全的复用，避免了数据库连接频繁建立、关闭的开销。
+
+对于共享资源，有一个很著名的设计模式：资源池。该模式正是为了解决资源频繁分配、释放所造成的问题的。把该模式应用到数据库连接管理领域，就是建立一个数据库连接池，提供一套高效的连接分配、使用策略，最终目标是实现连接的高效、安全的复用。
+
+**数据库连接池的基本原理是在内部对象池中维护一定数量的数据库连接，并对外暴露数据库连接获取和返回方法**。如：外部使用者可通过getConnection 方法获取连接，使用完毕后再通过releaseConnection 方法将连接返回，注意此时连接并没有关闭，而是由连接池管理器回收，并为下一次使用做好准备。
+
+- 创建数据库连接的成本相对较高，因此我们选择预先创建它们，并在需要访问数据库时使用它们，而不是即时创建它们。
+- 数据库是共享资源，因此创建连接池并在所有业务事务中共享它们是比较好的。
+- 数据库连接池限制可以发送到数据库的负载量。
 
 # Visual Studio Code
 
@@ -1385,3 +1464,129 @@ docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-
 # Cursor
 
 cursor是一个集成了[GPT4](https://zhida.zhihu.com/search?content_id=252236639&content_type=Article&match_order=1&q=GPT4&zhida_source=entity)、[Claude 3.5](https://zhida.zhihu.com/search?content_id=252236639&content_type=Article&match_order=1&q=Claude+3.5&zhida_source=entity)等先进LLM的类[vscode](https://zhida.zhihu.com/search?content_id=252236639&content_type=Article&match_order=1&q=vscode&zhida_source=entity)的编译器，可以理解为在vscode中集成了AI辅助编程助手，从下图中的页面可以看出cursor的布局和vscode基本一致，并且cursor的使用操作也和vscode一致，包括extension下载、python编译器配置、远程服务器连接和settings等，如果你是资深vscode用户，那么恭喜你可以直接无缝衔接cursor。
+
+# 编码器
+
+#### ffmpeg
+
+```shell
+ffmpeg -i input.mp3 -f wav output.wav
+ffmpeg -i input.wav -f mp2 output.mp3
+```
+
+Ubuntu文件资源管理器中没有缩略图的原因
+
+1. 没有安装ffmpeg和ffmpegthumbnailer
+
+```shell
+sudo apt install ffmpegthumbnailer
+```
+
+2. Nautilus 的缩略图生成功能未启用
+
+```shell
+# 打开 Nautilus 文件管理器。
+# 点击右上角的菜单图标，选择“首选项”（Preferences）。
+# 在“搜索和预览”选项卡下，确保“显示缩略图”设置为“始终”或“文件小于某大小”。（建议设为 “始终” 以确保所有文件生成缩略图。）
+nautilus -q  # 重启资源管理器
+rm -rf ~/.cache/thumbnails/*  # 可选,清除缩略图缓存
+```
+
+3. 部分格式可能需要特定的解码库来生成缩略图
+
+```shell
+sudo apt install ubuntu-restricted-extras gstreamer1.0-libav gstreamer1.0-plugins-good  # 安装支持的视频解码库（如 GStreamer 插件）
+```
+
+
+
+# Mujoco
+
+# Nginx
+
+#### 伪静态
+
+* 页面能正常跳转，可是css、js和相关的图片就是不出来
+
+```nginx
+http {
+    server {
+        location ~ .* {
+            proxy_pass  http://demo;
+            proxy_set_header  Host $http_host;
+            proxy_set_header  X-Real-IP $remote_addr;
+            proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+    }
+}
+```
+
+* 网页开发配置伪静态，
+
+  这个技术可以通过spring 的参数路径来实现，同样可以使用nginx 伪静态实现
+
+  优点：
+
+  1. seo 更友好，静态化路径会更好收录
+  2. 更安全，不容易被针对地址所攻击
+
+  例子1. 修改nginx.htaccess文件
+
+```nginx
+# Check if a file exists, or route it to index.php.
+try_files $uri $uri/ /exploit/index.php?$query_string;
+if (!-e $request_filename) {
+    rewrite  ^(.*)$  /index.php?s=$1  last;
+    break;
+}
+```
+  例子2. 将 http://192.168.203.102/article/detail?articleId=123adsas 改为 http://192.168.203.102/article/detail/123adsas.html
+```nginx
+server {
+    listen       80;
+    server_name  localhost;
+    rewrite_log on;
+ 
+    access_log  /app/log/nginx/host.access.log  main;
+    error_log   /app/log/nginx/host.error.log   notice;
+   
+    location / {
+        proxy_pass   http://127.0.0.1:8080;
+        rewrite ^(.*)/article/detail/(\w+).html$ $1/article/detail?articleId=$2 last;
+    }
+  
+}
+```
+
+#### 反向代理与负载均衡
+
+负载均衡是指定一系列的后端服务,然后通过指定的策略去负载,最后在location 中指定这个负载均衡节点 , 完成反向代理与负载均衡
+
+#### 动静分离
+
+动态资源(jsp、ftl、thymeleaf)与静态资源(js、css、img)分开部署。
+其中nginx 对静态资源的访问性能远高出tomcat 等应用服务器,同时nginx 可以提供缓存和gzip等扩展,在高并发情况下还可以再进行集群避免单点故障
+
+#### 防盗链
+
+# Apache
+
+* url强制下载
+
+要注意，强制下载属性是一种浏览器行为，不是 HTML 的标准属性。因此，无法保证所有浏览器都会遵循这些设置，尤其是在移动设备上的浏览器。有些浏览器可能会将下载的行为委托给用户进行选择。
+
+这可以通过在服务器上的相关配置文件（例如 Apache 的 .htaccess 文件）
+
+```xml
+<FilesMatch "\.(jpg|jpeg|png|gif)$">
+  Header set Content-Disposition attachment
+</FilesMatch>
+```
+
+* 打开apache路由重写的功能
+
+
+
+# EAC
+
+[实体CD无损翻录/抓轨的通用教程（通过Exact Audio Copy）](https://www.bilibili.com/opus/925630344961458181)

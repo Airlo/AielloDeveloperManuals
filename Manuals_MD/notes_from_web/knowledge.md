@@ -12,6 +12,10 @@ I2C通信是一种同步串行通信方式，它有两根双向信号线。一�
 
 ## 网络
 
+### 层2和层3
+
+二层协议通常使用的协议有以太网、[令牌环网](https://zhida.zhihu.com/search?content_id=563687090&content_type=Answer&match_order=1&q=令牌环网&zhida_source=entity)等；而三层协议通常使用的协议有IP、[ICMP](https://zhida.zhihu.com/search?content_id=563687090&content_type=Answer&match_order=1&q=ICMP&zhida_source=entity)、[ARP](https://zhida.zhihu.com/search?content_id=563687090&content_type=Answer&match_order=1&q=ARP&zhida_source=entity)等。
+
 ### TCP/IP通讯协议
 TCP/IP（Transmission Control Protocol/Internet Protocol，传输控制协议/网际协议）是指能够在多个不同网络间实现信息传输的协议簇。TCP/IP协议不仅仅指的是[TCP](https://baike.baidu.com/item/TCP/33012?fromModule=lemma_inlink) 和[IP](https://baike.baidu.com/item/IP/224599?fromModule=lemma_inlink)两个协议，而是指一个由[FTP](https://baike.baidu.com/item/FTP/13839?fromModule=lemma_inlink)、[SMTP](https://baike.baidu.com/item/SMTP/175887?fromModule=lemma_inlink)、TCP、[UDP](https://baike.baidu.com/item/UDP/571511?fromModule=lemma_inlink)、IP等协议构成的协议簇， 只是因为在TCP/IP协议中TCP协议和IP协议最具代表性，所以被称为TCP/IP协议。
 
@@ -61,6 +65,12 @@ print(data)
 
 ### HTTP
 
+HTTP 是基于请求响应式的，即通信只能由客户端发起，服务端做出响应，无状态，无连接。
+
+无状态：每次连接只处理一个请求，请求结束后断开连接。
+
+无连接：对于事务处理没有记忆能力，[服务器](https://cloud.tencent.com/product/cvm/?from_column=20065&from=20065)不知道客户端是什么状态。
+
 #### RESTFUL
 
 RESTFUL是一种网络应用程序的设计风格和开发方式，基于HTTP，可以使用XML格式定义或JSON格式定义。 RESTFUL适用于移动互联网厂商作为业务使能接口的场景，实现第三方OTT调用移动网络资源的功能，动作类型为新增、变更、删除所调用资源。
@@ -106,6 +116,46 @@ UDP协议分片：
 
 https://github.com/dongyusheng/csdn-code/tree/master/udp_piece
 
+### WebSocket
+
+WebSocket 与Socket 没有直接联系。WebSocket是双向通信协议，模拟Socket协议，可以双向发送或接受信息。
+
+这种单向请求的特点，注定了如果服务器有连续的状态变化，客户端要获知就非常麻烦。我们只能使用"轮询"：每隔一段时候，就发出一个询问，了解服务器有没有新的信息。最典型的场景就是聊天室。
+
+轮询的效率低，非常浪费资源（因为必须不停连接，或者 HTTP 连接始终打开）。因此，工程师们一直在思考，有没有更好的方法。WebSocket 就是这样发明的。它的最大特点就是，服务器可以主动向客户端推送信息，客户端也可以主动向服务器发送信息，是真正的双向平等对话，属于服务器推送技术的一种。
+
+#### WebSocket 与 HTTP 的关系
+
+![](./elements/http_vs_websocket.png)
+
+相同点：
+
+1. 都是一样基于 TCP 的，都是可靠性传输协议。
+
+2. 都是应用层协议。
+
+不同点：
+
+1. WebSocket 是双向通信协议，模拟 Socket 协议，可以双向发送或接受信息。HTTP 是单向的。
+
+2. WebSocket 是需要握手进行建立连接的。
+
+联系：
+
+1. WebSocket在建立握手时，数据是通过HTTP传输的。但是建立之后，在真正传输时候是不需要HTTP协议的。
+
+### AMQP
+
+AMQP又称为高级消息队列协议，是一种进程间进行异步消息的网络协议。它的出现是为了让各类消息中间件提供统一服务，以降低系统集成的开销。目前，完全准寻AMQP协议的消息中间件只有RabbitMQ。虽然各大中间件产品也都针对不同的语言推出了客户端。但是，无论是从业务适应性还是集成通用性上来说，比较推荐的还是RabbitMQ。不同的消息中间件在性能上的差异网上资料很多，这里不再赘述。
+
+amqp协议和http协议一样都是建立在TCP/IP协议簇之上的应用层协议。不同于http协议的，它是一个二进制协议，具有多信道，异步，高效等特点。amqp协议规定了从消息发布者到消息接收者之间的消息传递方式，并且提出了交换机（Exchange）队列（Queue）以及他们之间的路由（Routing）。
+
+作为一套标准协议，使用者甚至可以完全根据amqp的协议规范定制化的开发出客户端和RabbitMQ通信，这一特点也让RabbitMQ在业务通用性上具备了得天独厚的优势。
+
+AMQP协议最值得学习的地方在于，它定义了消息的发送和投递过程：
+
+　　交换机（Exchange）负责接收消息，并根据提前指定的规则（Routing）投送消息到特定队列（Queue）。消费者监听队列，并处理消息。如果多个消费者监听同一个队列，消息一般会轮流的发送给它们。以实现负载均衡。此外，通过虚拟路径约束还允许在不同的虚拟路径下建立同命队列。
+
 # 通信与控制
 
 ## 经典控制算法
@@ -125,6 +175,13 @@ PWM信号用于直流电机的速度控制，调光LED等。
 
 ![143811z4tggsgssg9gslyt](./elements/143811z4tggsgssg9gslyt.png)
 ## 网络常识
+
+#### OSI七层模型
+
+![](./elements/OSI_7.png)
+
+![](./elements/OIS_7_detail.png)
+
 #### URI
 URI，统一资源标志符(Uniform Resource Identifier， URI)，表示的是web上每一种可用的资源，如 HTML文档、图像、视频片段、程序等都由一个URI进行标识的。
 
@@ -162,7 +219,7 @@ URL的格式由三部分组成：
 #### URI和URL之间的区别
 从上面的例子来看，你可能觉得URI和URL可能是相同的概念，其实并不是，URI和URL都定义了资源是什么，但URL还定义了该如何访问资源。URL是一种具体的URI，它是URI的一个子集，它不仅唯一标识资源，而且还提供了定位该资源的信息。URI 是一种语义上的抽象概念，可以是绝对的，也可以是相对的，而URL则必须提供足够的信息来定位，是绝对的。
 
-#### 跨源资源共享(CORS)
+#### 跨源资源共享 CORS
 
 或通俗地译为跨域资源共享，表示除了它自己以外的其他[源](https://developer.mozilla.org/zh-CN/docs/Glossary/Origin)（域、协议或端口），使得浏览器允许这些源访问加载自己的资源。跨源资源共享还通过一种机制来检查服务器是否会允许要发送的真实请求，该机制通过浏览器发起一个到服务器托管的跨源资源的“预检”请求。在预检中，浏览器发送的头中标示有 HTTP 方法和真实请求中会用到的头。
 ##### 功能概述
@@ -175,7 +232,157 @@ CORS 请求失败会产生错误，但是为了安全，在 JavaScript 代码层
 
 https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS
 
+#### 中间件 Middleware
 
+介于应用系统和系统软件之间的一类软件，它使用系统软件所提供的基础服务（功能），衔接网络上应用系统的各个部分或不同的应用，能够达到[资源共享](https://baike.baidu.com/item/资源共享/233480?fromModule=lemma_inlink)、功能共享的目的。它并没有很严格的定义，但是普遍接受[IDC](https://baike.baidu.com/item/IDC/53156?fromModule=lemma_inlink)的定义：中间件是一种独立的系统软件[服务程序](https://baike.baidu.com/item/服务程序/16915606?fromModule=lemma_inlink)，分布式应用软件借助这种软件在不同的技术之间[共享资源](https://baike.baidu.com/item/共享资源/10366244?fromModule=lemma_inlink)，中间件位于[客户机](https://baike.baidu.com/item/客户机/5168153?fromModule=lemma_inlink)服务器的操作系统之上，管理[计算资源](https://baike.baidu.com/item/计算资源/19140081?fromModule=lemma_inlink)和[网络通信](https://baike.baidu.com/item/网络通信/9636548?fromModule=lemma_inlink)。
+
+[一文了解 Middleware：中间件是什么意思？中间件有哪些？](https://www.redhat.com/zh/topics/middleware/what-is-middleware)
+
+![](./elements/middleware.jpg)
+
+中间件在应用开发中将功能分为四层
+
+* **容器层**
+
+中间件的这一层将以统一方式管理应用生命周期的交付。它提供带有 [CI/CD](https://www.redhat.com/zh/topics/devops/what-is-ci-cd) 的 [DevOps](https://www.redhat.com/zh/topics/devops) 能力、容器管理以及[服务网格](https://www.redhat.com/zh/topics/microservices/what-is-a-service-mesh)功能。
+
+* **运行时层**
+
+该层包含了自定义代码的执行环境。中间件可以为高度分布式云环境（例如[微服务](https://www.redhat.com/zh/topics/microservices)）、内存中缓存（用于快速访问数据）和消息传递（用于快速数据传输）提供轻量级运行时和框架。
+
+* **集成层**
+
+集成中间件可提供相关服务，以通过消息传递、集成和 API 来连接自定义与购买的应用及[软件即服务（SaaS）](https://www.redhat.com/zh/topics/cloud-computing/what-is-saas)资产，从而形成功能正常的系统。此外，它还可以提供内存数据库和数据缓存服务、数据/事件流以及 [API 管理](https://www.redhat.com/zh/topics/integration/shenmeshi-api-guanli)功能。
+
+* **流程自动化和决策管理层**
+
+这是开发中间件的最后一层，旨在强化关键智能，实现优化和自动化，以及加强决策管理。
+
+目前，针对不同的应用涌现出各具特色的中间件产品。从不同的角度和层次对中间件有不同的分类。根据中间件在系统中所起的作用和采用的技术不同，可以把中间件大致划分为以下几种：
+
+##### 1. 数据访问中间件（Data Access Middieware）
+
+##### 2. 远程过程调用中间件（RPC）
+
+**RPC是指远程过程调用**，也就是说两台服务器A，B，一个应用部署在A服务器上，想要调用B服务器上应用提供的函数/方法，**由于不在一个内存空间，不能直接调用**，需要通过**网络来表达调用的语义和传达调用的数据**
+
+##### 3. 面向消息中间件（MOM）
+
+ 我们通常说的MQ指的是消息中间件的工程技术实践。它的诞生来源于MOM的概念: MOM全称Message-oriented Middleware，是应用于以分布式应用或系统中的异步、松耦合、可靠、可扩展和安全通信的一类组件。
+
+而MQ则是消息队列服务，是面向消息中间件（MOM）的最终实现，是真正的服务提供者。基于MOM思想，市面上出现了很多这种产品，如ibm(MQServices)、Microsoft(MSMQ)以及BEA的MessageMQ，RocketMQ，activemq，KafKa等。处于百家争鸣阶段都是各自实现各自的，但没有统一的实现标准。
+
+sun公司为了解决百家争鸣的现象指定一套规范，以后大家就按照这个规范来实现MOM消息中间件，既JMS（Java Message Service）规范[横空出世](https://links.jianshu.com/go?to=https%3A%2F%2Fwww.baidu.com%2Fs%3Fwd%3D%E6%A8%AA%E7%A9%BA%E5%87%BA%E4%B8%96%26tn%3D24004469_oem_dg%26rsv_dl%3Dgh_pl_sl_csd)。
+
+  JMS（Java Messaging Service）是Java平台上有关面向消息中间件(MOM)的技术规范。
+
+作者：mysimplebook
+链接：https://www.jianshu.com/p/359beba27edc
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+##### 4. 面向对象的中间件
+
+##### 5. 事务处理中间件（TPM）
+
+##### 6. 网络中间件
+
+Tomcat
+
+## 分布式系统通讯
+
+#### DDS
+
+DDS（Data Distribution Service）（for Real-Time Systems）是一种用于分布式系统的中间件协议和API标准，由对象管理组织（Object Management Group, OMG）定义。DDS的主要目标是支持高效、可靠和实时的数据分发，特别适用于对低延迟和高吞吐量有严格要求的应用场景，如工业控制、军事系统、航空电子系统、智能交通系统以及物联网（IoT）应用。
+
+##### ROS与DDS
+
+ROS1使用的是ROS消息传递协议(RMP)。RMP是一种简单的协议，它基于TCP/IP网络通信，并使用XML-RPC和TCPROS进行消息的传递。RMP的设计目的是简单易用，适用玉小型的机器人系统和局域网环境。然而，RMP在多播和安全性方面存在一些限制。
+
+DDS 是一种端到端中间件，提供与 ROS 系统相关的功能，例如分布式发现（不像 ROS 1 中那样集中式）和对传输的不同“服务质量”选项的控制。也就是去中心化，ros2使用DDS后不再依赖roscore
+
+DDS的实现又有很多种例如： RTI 的Connext DDS、eProsima 的Fast DDS、Eclipse 的Cyclone DDS或 GurumNetworks 的GurumDDS。ubuntu20.04 Foxy 默认的是FastDDS无需额外安装即可使用。
+
+[cyclonedds库的简单介绍](https://feetingtimes.github.io/posts/cyclonedds-introduction/)
+
+#### SOME/IP
+
+Scalable service-Oriented Middleware over IP，即基于IP协议的面向服务的可扩展通信中间件。具体来说，它是一种用于汽车内部不同电子控制单元（ECUs）之间通信的协议，由宝马集团在2011年设计并推出。SOME/IP作为中间件，支持多种编程语言和平台，提供高效的序列化和反序列化机制，支持服务发现，并能与安全协议结合使用以确保数据传输的安全。
+
+SOME/IP在汽车通信领域的重要性在于它能够解决传统CAN通信遇到的瓶颈，如通信速度和通信负荷的限制，适用于汽车智能化程度越来越高的需求。
+
+#### RPC协议
+
+RPC（远程过程调用）是一种用于实现分布式系统中不同进程或不同计算机之间通信的技术。它允许我们像调用本地函数一样调用远程计算机上的函数，使得分布式系统的开发变得更加简单和高效。
+
+##### 实现一个RPC的重要三步
+
+Call ID映射 序列化和反序列化 网络传输
+
+**【Note】网络传输层需要把Call ID和序列化后的参数字节流传给服务端，然后再把序列化后的调用结果传回客户端。**只要能完成这两者的，都可以作为传输层使用。因此，它所使用的协议其实是不限的，能完成传输就行。**尽管大部分RPC框架都使用TCP协议，但其实UDP也可以，而gRPC干脆就用了HTTP2。**
+
+  所以，要实现一个RPC框架，其实只需要把以上三点实现了就基本完成了。Call ID映射可以直接使用函数字符串，也可以使用整数ID。**映射表一般就是一个哈希表**。序列化反序列化可以自己写，也可以使用**Protobuf**或者FlatBuffers之类的。网络传输库可以自己写socket，或者用**asio，ZeroMQ，Netty**之类。
+
+一些常见的RPC协议，例如：
+
+* XmlRPC
+
+- JsonRPC：使用JSON作为通信格式的RPC协议。
+- SOAP：Simple Object Access Protocol 简单对象访问协议，基于XML的通信协议，支持多种传输协议。SOAP 协议 = HTTP 协议 + XML 数据格式
+- gRPC：由Google开发的高性能、开源的RPC框架，支持多种编程语言和传输协议。基于最新的HTTP2.0协议，并支持常见的众多编程语言。这个RPC框架是基于HTTP协议实现的，底层使用到了Netty框架的支持。
+- Dubbo是阿里集团开源的一个极为出名的RPC框架
+
+##### xmlRPC
+
+XmlRPC是一种基于XML（eXtensible Markup Language）的远程过程调用协议。它使用简单的文本格式进行通信，将请求和响应数据封装在XML中，广泛应用于Web服务和分布式系统中请求示例
+
+一个XmlRPC请求由以下几个部分组成：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<methodCall>
+  <methodName>methodName</methodName>
+  <params>
+    <param>
+      <value>param1</value>
+    </param>
+    <param>
+      <value>param2</value>
+    </param>
+    ...
+  </params>
+</methodCall>
+```
+
+- `<methodName>`：指定要调用的远程方法名。
+- `<params>`：包含要传递给远程方法的参数列表。
+
+一个XmlRPC响应由以下几个部分组成：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<methodResponse>
+  <params>
+    <param>
+      <value>resultValue</value>
+    </param>
+  </params>
+</methodResponse>
+```
+
+- `<params>`：包含远程方法调用的结果值。
+
+#### WebService
+
+WebService是一种跨编程语言和跨操作系统平台的远程调用技术。
+
+XML+XSD、SOAP、WSDL就是构成 WebService 平台的三大技术。
+
+- [WebService](https://so.csdn.net/so/search?q=WebService&spm=1001.2101.3001.7020)采用Http协议来在客户端和服务端之间传输数据。WebService使用XML来封装数据，XML主要的优点在于它是跨平台的。
+- WebService通过HTTP协议发送请求和接收结果时，发送的请求内容和结果内容都采用XML格式封装，并增加了一些特定的HTTP消息头，以说明HTTP消息的内容格式，这些特定的HTTP消息头和XML内容格式就是SOAP协议规定的。
+- WebService服务器端首先要通过一个WSDL文件来说明自己有什么服务可以对外调用。简单的说，WSDL就像是一个说明书，用于描述WebService及其方法、参数和返回值。 WSDL文件保存在Web服务器上，通过一个url地址就可以访问到它。客户端要调用一个WebService服务之前，要知道该服务的WSDL文件的地址。WebService服务提供商可以通过两种方式来暴露它的WSDL文件地址：1.注册到UDDI服务器，以便被人查找；2.直接告诉给客户端调用者。
+
+**WebService交互的过程就是,WebService遵循SOAP协议通过XML封装数据，然后由Http协议来传输数据。**
 
 # 人工智能与算法
 
@@ -363,6 +570,29 @@ APS为了快速响应客户需求，需要快速收敛、简洁的启发式算�
 4. **代表工单法**
 5. **工单拆解法**
 
+## 大模型时代算法
+### 大模型常识
+#### 多模态
+
+多模态学习（Multimodal Learning）是一种利用来自不同感官或交互方式的数据进行学习的方法，这些数据模态可能包括文本、图像、音频、视频等。**多模态学习**通过融合多种数据模态来训练模型，从而提高模型的感知与理解能力，实现跨模态的信息交互与融合。
+
+[一文彻底搞懂多模态：模态表示、多模态融合、跨模态对齐](https://blog.csdn.net/star_nwe/article/details/143416379)
+
+[多模态中的Prompt范式：从CLIP、CoOp到CLIP-adapter](https://blog.csdn.net/c9Yv2cf9I06K2A9E/article/details/121154424)
+
+#### NLP
+
+**NLP**的全称是**N**atuarl **L**anguage **P**rocessing，中文意思是[自然语言处理](https://so.csdn.net/so/search?q=自然语言处理&spm=1001.2101.3001.7020)，是人工智能领域的一个重要方向
+
+自然语言处理（NLP）的一个最伟大的方面是跨越多个领域的计算研究，从人工智能到计算语言学的多个计算研究领域都在研究计算机与人类语言之间的相互作用。
+
+NLP经历了4次重大变化 
+
+* **范式一：非神经网络时代的完全监督学习（特征工程）**
+* **范式二：基于神经网络的完全监督学习（架构工程）**
+* **范式三：预训练，精调范式（目标工程）**
+* **范式四：预训练，提示，预测范式（Prompt工程）(2021)**
+
 # 多线程编程
 
 ## Python多线程
@@ -403,7 +633,7 @@ terminate called after throwing an instance of 'std::system_error'
 
 #### 前置声明
 
-在类B里面套用模板使用类A，A是前置声明
+在类B里面套用模板使用类A，A是前置声明数据库连接池
 
 
 
@@ -477,6 +707,12 @@ lambda结构体在没有捕获任何变量的时候是一个函数指针，但�
 1. 要写一个函数，但是太短了，懒得给一个名字给它（这也就是有时闭包叫匿名函数）。比如函数接受回调函数。
 2. 在当前上下文要做一些处理，但是还没到处理的时候，就先定义，等合适的时候再调用。比如scope guard
 
+#### SFINAE 匹配失败并不是一个错误
+
+Substitution failure is not an error 作用就如它的名字一样，在编译期模板展开时或者在有模板泛型参与时的匹配列表时，出现一些问题时，不会造成编译过程的中断。同时，在元编程，可以用来实现编译期的错误控制和反射，在实际的应用中，最典型的就是判断模板替换的类型是否是class（或者普通类型）或者其是否拥有指定的成员函数或者成员变量。
+
+[跟我学c++高级篇——模板元编程之六SFINAE](https://blog.csdn.net/fpcc/article/details/129227407)
+
 #### prvalue/纯右值
 
 #### **xvalue/临时变量**
@@ -518,6 +754,27 @@ int main() {
 ```
 
 
+
+# 现代数据格式
+
+#### OpenVDB
+
+OpenVDB 是一个获得奥斯卡奖的数据结构，在github上有对应的C++开源库，包含一个分层数据结构和一套工具，用于高效存储和操作在三维网格上离散化的稀疏体积数据。它由 DreamWorks Animation 开发，用于故事片制作中通常遇到的体积应用程序，现在由 Academy Software Foundation (ASWF) 维护，采用 MPL2.0 协议。(2022)
+
+读者可以通过上面的视频对该数据结构有一个直观的了解，在整个视觉效果行业中，它被用于模拟和渲染水、火、烟、云和大量其他依赖于稀疏体积数据的效果。而这类数据通常的特点是全局稀疏而局部稠密（如下图）。而现实中这类数据也很常见，比如风场，污染等场数据。这类数据往往数据量比较大，且存在动态更新，空间分析等各类应用场景。因此，个人认为，OpenVDB可以作为场数据,甚至也是点云数据的一种存储格式，和现有的解决方案做一个对比。
+
+OpenVDB的特点
+
+- 动态，包括随时间的模拟和动画，以及拓扑结构的动态变换
+- 内存高效，包括内存的动态和分层分配和数据的向量化压缩
+- 泛型拓扑，支持任意动态拓扑结构
+- 快速数据访问（随机或顺序）
+- 没有范围限制，无限范围
+- 高效的层级算法，基于B+树的缓存优化和bounding-volume查询，以及SSE，多线程，blocking等加速技术
+- 自适应分辨率，树状结构
+- 简易
+- 可配置，比如树深度，节点大小等
+- out of core，动态调度
 
 # 设计模式与编程规范
 
@@ -576,3 +833,22 @@ int main() {
 精确的特性阻抗是一个与频率相关的量。而在实际应用中，传输线的电阻部分，即耗散能量的部分往往可以忽略不计，即上式中的R和G为0。近似为无损传输线。对于无损传输线，阻抗表达式可以表示为
 
 ![8365643-94e38a34de6f504b](.\elements\8365643-94e38a34de6f504b.webp)
+
+# DevOps
+
+![](./elements/devops_loop_0.png)
+![](./elements/devops_loop_1.png)
+![](./elements/devops_loop_2.png)
+![](./elements/devops_loop_3.png)
+
+https://www.redhat.com/zh/topics/devops/what-is-ci-cd
+
+https://www.redhat.com/zh/topics/devops
+
+https://www.redhat.com/zh/topics/devops/what-is-sre
+
+https://blog.csdn.net/weixin_45565886/article/details/129763344
+
+[什么是 DevOps？看这一篇就够了！](https://www.cnblogs.com/DevLake-DevStream/p/what-is-devops.html)
+
+[终于有人把DevOps讲明白了](https://zhuanlan.zhihu.com/p/562036793)

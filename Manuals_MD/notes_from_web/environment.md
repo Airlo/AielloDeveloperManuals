@@ -634,6 +634,22 @@ sh /root/datelog.sh
 
 * 使用第三方内核需要一定的技术背景，并且稳定性可能不如 Linux 发行版的官方内核。
 
+### Apollo Kernel
+
+The Apollo Kernel provides the necessary kernel level support to run Apollo software stack. In the first release, we add the most popular solution, Linux Kernel, under the linux directory. (https://github.com/ApolloAuto/apollo-kernel/tree/master)
+
+Apollo Linux Kernel is based on official [Linux Kernel 4.4.32](https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.4.32.tar.gz) with some modifications.
+
+**What is the difference**
+
+- Realtime patch (https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO)
+- Latest e1000e intel ethernet driver
+- Bugfix for Nvidia driver under realtime patch
+- Double free in the inet_csk_clone_lock function patch (https://bugzilla.redhat.com/show_bug.cgi?id=1450972)
+- Other cve security patches
+
+[Kernel config files](https://github.com/ApolloAuto/apollo-kernel/tree/master/linux/configs) are modified for Apollo based on Ubuntu's config-4.4.0-X-generic.
+
 ## 驱动与引导
 
 ### 引导疑难
@@ -1338,3 +1354,12 @@ Key: BypassRAMCheck
 value: 1 
 ```
 
+# HUAWEI  LiteOS
+
+驱动万物感知、互联、智能，可广泛应用于面向个人、家庭和行业的物联网产品和解决方案。
+
+官网: https://www.huaweicloud.com/product/liteos.html
+
+Huawei LiteOS 是华为面向IoT领域，构建的“统一物联网操作系统和中间件软件平台”，具有轻量级（内核小于10k）、低功耗、互联互通、安全等关键能力。Huawei LiteOS 目前主要应用于智能家居、穿戴式、车联网、智能抄表、工业互联网等 IoT 领域的智能硬件上，还可以和LiteOS生态圈内的硬件互联互通，提高用户体验。
+
+Liteos操作系统具有能耗最低，尺寸小、响应快等特点，也建立了开源社区，能够支持的芯片例如海思的PLC芯片HCT3911、媒体芯片3798M/C、IPCamera芯片Hi3516A，以及LTE-M芯片等。

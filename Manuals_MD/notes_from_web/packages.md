@@ -742,6 +742,54 @@ OpenPose人体姿态识别项目是美国卡耐基梅隆大学（CMU）基于卷
 
 [(28条消息) 已经解决：OpenPose报错：error == cudaSuccess (2 vs. 0) out of memory_openpose out of memory_ayouayouwei的博客-CSDN博客](https://blog.csdn.net/qq_36834256/article/details/101114493)
 
+## AMQP CPP
+
+TODO 和librabbitmq相比对RabbitMQ的支持如何?
+
+## Boost Asio
+
+
+
+## OpenDDS
+
+OpenDDS是使用C++语言针对OMG数据分发服务(DDS)的一种开源实现。由OCI公司设计和维护，可从http://www.opendds.org/的OpenDDS社区门户中获得帮助。
+
+尽管本身OpenDDS采用C++语言实现，但也提供JAVA和JMS的开发接口，这意味着JAVA程序开发也可以使用OpenDDS。
+
+# Java
+
+## Spring
+
+![](./elements/spring_dev_history.jpeg)
+
+## Spring boot
+
+是由 **Pivotal 团队** 开发的一个全新框架，其设计目的是简化新 Spring 应用的初始搭建以及开发过程。
+
+SpringBoot是伴随着Spring 4.0而生的，boot是引导的意思，也就是它的作用其实就是在于帮助开发者快速的搭建Spring框架，因此SpringBoot继承了Spring优秀的基因，在Spring中开发更为方便快捷。
+
+![](./elements/spring_boot_and_spring.png)
+
+但是Spring Boot 只是个微框架，没有提供相应的服务发现与注册的配套功能，没有外围监控集成方案，没有外围安全管理方案，所以在微服务架构中，还需要 Spring Cloud 来配合一起使用。
+
+#### Bean
+
+Bean 是由 Spring 容器管理的对象。通过 Bean，Spring 提供了一个强大的依赖注入（DI）机制，使得对象之间的关系更加松耦合。Bean 的定义通常是在 Spring 配置类或 XML 文件中进行。
+
+#### 依赖注入（DI）机制
+
+ 顾名思义，就是使用类中的构造函数，给成员变量赋值。注意，赋值的操作不是我们自己做的，而是通过配置的方式，让spring框架来为我们注入。
+
+目的是降低代码的耦合度，使代码更加灵活和可维护。
+
+在 Java 中，依赖通常是通过**构造函数或者 Setter** 方法来注入的。使用依赖注入，我们可以将对象的创建和依赖关系的管理分离开来，从而使得代码更加容易测试和维护。
+
+(将对象作为参数进行注入)
+
+在 Spring 中，依赖注入是通过反射来实现的。当 IOC 容器创建 Bean 时，它会检查 Bean 定义中所声明的依赖关系，并尝试通过反射来注入这些依赖关系。
+
+依赖注入通常分为三种方式：构造函数注入、Setter 方法注入和字段注入。
+
 # Rust
 
 ```shell

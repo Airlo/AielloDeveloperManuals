@@ -77,3 +77,25 @@ Sangre de Muerdago访谈
 
 # 史政经素材
 
+
+
+# 卡片盒记忆法
+
+[卢曼的卡片盒笔记法：Zettelkasten Method](https://www.yangqi.show/posts/what-is-zettelkasten)
+
+# 开发者素材
+
+## Pivotal
+
+Pivotal 成立于2013年4月，致力于“改变世界构造软件的方式（We are transforming how the world builds software）”， 提供云原生应用开发 PaaS 平台及服务，帮助企业客户采用敏捷软件开发方法论， 从而提高软件开发人员工作效率、减少运维成本，实现数字化转型、IT 创新，并最终实现业务创新。 截至目前，财富 100 强中超过三分之一的企业使用 Pivotal 云原生平台。Pivotal 部分大型客户在采用 Pivotal 产品后，开发人员与运营人员比例可提高到 200:1，开发人员专注于编写软件代码时间增长了 50%。
+
+[是时候给大家介绍 Spring Boot/Cloud 背后豪华的研发团队了。](https://www.cnblogs.com/ityouknow/p/10213304.html)
+
+- Spring以及衍生框架、
+- 做缓存Redis、
+- 消息队列框架RabbitMQ、
+- 还有更牛的Greenplum，这些都是Pivotal公司的。
+
+- DevOps理论的提出者都在这个公司，
+- 2016年风靡全球的云原生理念亦是Pivotal公司提出，
+- Pivotal Cloud Foundry
