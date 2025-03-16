@@ -17,9 +17,11 @@ I2C通信是一种同步串行通信方式，它有两根双向信号线。一�
 二层协议通常使用的协议有以太网、[令牌环网](https://zhida.zhihu.com/search?content_id=563687090&content_type=Answer&match_order=1&q=令牌环网&zhida_source=entity)等；而三层协议通常使用的协议有IP、[ICMP](https://zhida.zhihu.com/search?content_id=563687090&content_type=Answer&match_order=1&q=ICMP&zhida_source=entity)、[ARP](https://zhida.zhihu.com/search?content_id=563687090&content_type=Answer&match_order=1&q=ARP&zhida_source=entity)等。
 
 ### TCP/IP通讯协议
+
 TCP/IP（Transmission Control Protocol/Internet Protocol，传输控制协议/网际协议）是指能够在多个不同网络间实现信息传输的协议簇。TCP/IP协议不仅仅指的是[TCP](https://baike.baidu.com/item/TCP/33012?fromModule=lemma_inlink) 和[IP](https://baike.baidu.com/item/IP/224599?fromModule=lemma_inlink)两个协议，而是指一个由[FTP](https://baike.baidu.com/item/FTP/13839?fromModule=lemma_inlink)、[SMTP](https://baike.baidu.com/item/SMTP/175887?fromModule=lemma_inlink)、TCP、[UDP](https://baike.baidu.com/item/UDP/571511?fromModule=lemma_inlink)、IP等协议构成的协议簇， 只是因为在TCP/IP协议中TCP协议和IP协议最具代表性，所以被称为TCP/IP协议。
 
 #### socket
+
 所谓套接字(Socket)，就是对网络中不同主机上的应用进程之间进行双向通信的端点的抽象。一个套接字就是网络上进程通信的一端，提供了应用层进程利用网络协议交换数据的机制。从所处的地位来讲，套接字上联应用进程，下联网络协议栈，是应用程序通过网络协议进行通信的接口，是应用程序与网络协议栈进行交互的接口。
 
 套接字是通信的基石，是支持[TCP/IP协议](https://baike.baidu.com/item/TCP%2FIP协议/212915?fromModule=lemma_inlink)的路通信的基本操作单元。可以将套接字看作不同主机间的进程进行双间通信的端点，它构成了单个主机内及整个网络间的编程界面。
@@ -83,6 +85,44 @@ REST架构的核心便是**Representational State Transfer**
 
 [使用django和django-rest-framework开发RESTful风格的后端程序(0) - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/53164234)
 
+### HTTP/2
+
+http2.0是一种安全高效的下一代http传输协议。安全是因为http2.0建立在https协议的基础上，高效是因为它是通过**二进制分帧**来进行数据传输。正因为这些特性，http2.0协议也在被越来越多的网站支持。
+
+* HTTP/2并非HTTP的完整替代。
+* 类似于域名分片、资源内联和图片拼接等入侵入式技术在HTTP/2世界中正好适得其反。
+* HTTP/2不是类似于Websocket或者SSE这样的推送技术的替代品。
+* HTTP/2推送服务器只能被浏览器来处理，而不是应用。
+* 将HTTP/2和SSE结合起来提供高效的基于HTTP的双向通信。
+
+##### 二进制分帧 Binary Format
+
+http2.0之所以能够突破http1.X标准的性能限制，改进传输性能，实现低延迟和高吞吐量，就是因为其新增了二进制分帧层。
+
+帧(frame)包含部分：类型Type, 长度Length, 标记Flags, 流标识Stream和frame payload有效载荷。
+
+消息(message)：一个完整的请求或者响应，比如请求、响应等，由一个或多个 Frame 组成。
+
+流是连接中的一个虚拟信道，可以承载双向消息传输。每个流有唯一整数标识符。为了防止两端流ID冲突，客户端发起的流具有奇数ID，服务器端发起的流具有偶数ID。
+
+##### 多路复用 (Multiplexing) / 连接共享
+
+多路复用允许同时通过单一的http/2 连接发起多重的请求-响应消息。有了新的分帧机制后，http/2 不再依赖多个TCP连接去实现多流并行了。每个数据流都拆分成很多互不依赖的帧，而这些帧可以交错（乱序发送），还可以分优先级，最后再在另一端把它们重新组合起来。
+
+#### HTTP/2和Websocket
+
+| **HTTP/2**   | **Websocket**      |
+| ------------------ | ------------------------ |
+| **头**       | 压缩（HPACK）            |
+| **二进制**   | 是                       |
+| **多路复用** | 是                       |
+| **优先级**   | 是                       |
+| **压缩**     | 是                       |
+| **方向**     | 客户端/服务器+服务器推送 |
+| **全双工**   | 是                       |
+
+Websocket技术可能会继续使用，但是SSE和其EventSource API同HTTP/2的能力相结合可以在多数场景下达到同样的效果，但是会更简单。
+
 ### UDP
 
 ##### 传输特点
@@ -102,9 +142,8 @@ REST架构的核心便是**Representational State Transfer**
 
 在TCP/IP分层中，数据链路层用MTU（Maximum Transmission Unit，最大传输单元）来限制所能传输的数据包大小，MTU是指一次传送的数据最大长度，不包括数据链路层数据帧的帧头，如以太网的MTU为1500字节，实际上数据帧的最大长度为1514字节，其中以太网数据帧的帧头为14字节
 
-
-
 ##### UDP与MTU的关系
+
 MTU是指通信协议的链路层上面所能通过的最大数据包大小
 单个UDP传输的最大内容1472字节，但由于不同的网络中转设备设置的MTU值并不相同：
 Internet环境下：标准MTU值为576字节，UDP的数据长度应该控制在548字节（576-8-20）以内
@@ -131,13 +170,11 @@ WebSocket 与Socket 没有直接联系。WebSocket是双向通信协议，模拟
 相同点：
 
 1. 都是一样基于 TCP 的，都是可靠性传输协议。
-
 2. 都是应用层协议。
 
 不同点：
 
 1. WebSocket 是双向通信协议，模拟 Socket 协议，可以双向发送或接受信息。HTTP 是单向的。
-
 2. WebSocket 是需要握手进行建立连接的。
 
 联系：
@@ -159,6 +196,7 @@ AMQP协议最值得学习的地方在于，它定义了消息的发送和投递�
 # 通信与控制
 
 ## 经典控制算法
+
 #### PWM
 
 通常，脉宽调制（PWM）是一种调制技术，用于将消息编码为脉冲信号。 PWM由两个关键部分组成：频率和占空比。 PWM频率决定了完成单个周期（周期）所需的时间以及信号从高到低的波动速度。占空比决定信号在总时间段内保持高电平的时间。占空比以百分比表示。
@@ -174,6 +212,7 @@ PWM信号用于直流电机的速度控制，调光LED等。
 [(12条消息) 使用PID库，轻松搞定PID_w282529350的博客-CSDN博客_pid 过冲](https://blog.csdn.net/w282529350/article/details/51636460)
 
 ![143811z4tggsgssg9gslyt](./elements/143811z4tggsgssg9gslyt.png)
+
 ## 网络常识
 
 #### OSI七层模型
@@ -183,6 +222,7 @@ PWM信号用于直流电机的速度控制，调光LED等。
 ![](./elements/OIS_7_detail.png)
 
 #### URI
+
 URI，统一资源标志符(Uniform Resource Identifier， URI)，表示的是web上每一种可用的资源，如 HTML文档、图像、视频片段、程序等都由一个URI进行标识的。
 
 URI通常由三部分组成：
@@ -200,6 +240,7 @@ URI举例
 注意：以上三点只不过是对实例的解释，以上三点并不是URI的必要条件，URI只是一种概念，怎样实现无所谓，只要它唯一标识一个资源就可以了。
 
 #### URL
+
 URL是URI的一个子集。它是Uniform Resource Locator的缩写，译为**统一资源定位符**。
 通俗地说，URL是Internet上描述信息资源的字符串，主要用在各种WWW客户程序和服务器程序上。
 采用URL可以用一种统一的格式来描述各种信息资源，包括文件、服务器的地址和目录等。URL是URI概念的一种实现方式。
@@ -207,21 +248,23 @@ URL是URI的一个子集。它是Uniform Resource Locator的缩写，译为**统
 URL的一般格式为(带方括号[]的为可选项)：
 protocol :// hostname[:port] / path / [;parameters][?query]#fragment
 
-URL的格式由三部分组成： 
+URL的格式由三部分组成：
 ① 第一部分是协议(或称为服务方式)。
 ② 第二部分是存有该资源的主机IP地址(有时也包括端口号)。
 ③ 第三部分是主机资源的具体地址，如目录和文件名等。
 
 第一部分和第二部分用“://”符号隔开，
 第二部分和第三部分用“/”符号隔开。
-第一部分和第二部分是不可缺少的，第三部分有时可以省略。 
+第一部分和第二部分是不可缺少的，第三部分有时可以省略。
 
 #### URI和URL之间的区别
+
 从上面的例子来看，你可能觉得URI和URL可能是相同的概念，其实并不是，URI和URL都定义了资源是什么，但URL还定义了该如何访问资源。URL是一种具体的URI，它是URI的一个子集，它不仅唯一标识资源，而且还提供了定位该资源的信息。URI 是一种语义上的抽象概念，可以是绝对的，也可以是相对的，而URL则必须提供足够的信息来定位，是绝对的。
 
 #### 跨源资源共享 CORS
 
 或通俗地译为跨域资源共享，表示除了它自己以外的其他[源](https://developer.mozilla.org/zh-CN/docs/Glossary/Origin)（域、协议或端口），使得浏览器允许这些源访问加载自己的资源。跨源资源共享还通过一种机制来检查服务器是否会允许要发送的真实请求，该机制通过浏览器发起一个到服务器托管的跨源资源的“预检”请求。在预检中，浏览器发送的头中标示有 HTTP 方法和真实请求中会用到的头。
+
 ##### 功能概述
 
 跨源资源共享标准新增了一组 [HTTP 标头](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers)字段，允许服务器声明哪些源站通过浏览器有权限访问哪些资源。另外，规范要求，对那些可能对服务器数据产生副作用的 HTTP 请求方法（特别是 [`GET`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/GET) 以外的 HTTP 请求，或者搭配某些 [MIME 类型](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/MIME_types)的 [`POST`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/POST) 请求），浏览器必须首先使用 [`OPTIONS`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/OPTIONS) 方法发起一个预检请求（preflight request），从而获知服务端是否允许该跨源请求。服务器确认允许之后，才发起实际的 HTTP 请求。在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（例如 [Cookie](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Cookies) 和 [HTTP 认证](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication)相关数据）。
@@ -384,7 +427,25 @@ XML+XSD、SOAP、WSDL就是构成 WebService 平台的三大技术。
 
 **WebService交互的过程就是,WebService遵循SOAP协议通过XML封装数据，然后由Http协议来传输数据。**
 
+##### WSDL
+
+用于描述Web Service及其函数、参数和返回值。它是WebService客户端和服务器端都能理解的标准格式。因为是基于XML的，所以WSDL既是机器可阅读的，又是人可阅读的，这将是一个很大的好处。一些最新的开发工具既能根据你的Web service生成WSDL文档，又能导入WSDL文档，生成调用相应WebService的代理类代码。
+
 # 人工智能与算法
+
+## 算法常识
+
+#### 回归评价指标
+
+[回归评价指标：MSE、RMSE、MAE、R2、Adjusted R2_rmse和r2公式-CSDN博客](https://blog.csdn.net/u012735708/article/details/84337262)
+
+我们通常采用MSE、RMSE、MAE、R2来评价回归预测算法。
+
+* 均方误差：MSE（Mean Squared Error）
+* 均方根误差：RMSE（Root Mean Squard Error）
+* 平均绝对误差：MAE（Mean Absolute Error）
+* 决定系数：R2（R-Square）
+* 校正决定系数（Adjusted R-Square）
 
 ## 机器学习算法
 
@@ -438,8 +499,6 @@ XML+XSD、SOAP、WSDL就是构成 WebService 平台的三大技术。
 
 [Apriori算法介绍（Python实现） - llhthinker - 博客园 (cnblogs.com)](https://www.cnblogs.com/llhthinker/p/6719779.html)
 
-
-
 ## 移动机器人算法
 
 [移动机器人 - 知乎 (zhihu.com)](https://www.zhihu.com/column/c_1270308468994146304)
@@ -456,7 +515,7 @@ XML+XSD、SOAP、WSDL就是构成 WebService 平台的三大技术。
 
 ### SLAM建模
 
-[Barkeno/Semantic-LiDAR-SLAM: A Semantic-SLAM for 3D LiDAR & Visualized by OpenGL & Without ROS (github.com)](https://github.com/Barkeno/Semantic-LiDAR-SLAM)
+[Barkeno/Semantic-LiDAR-SLAM: A Semantic-SLAM for 3D LiDAR &amp; Visualized by OpenGL &amp; Without ROS (github.com)](https://github.com/Barkeno/Semantic-LiDAR-SLAM)
 
 #### g2o与图优化
 
@@ -508,6 +567,16 @@ XML+XSD、SOAP、WSDL就是构成 WebService 平台的三大技术。
 
 [(28条消息) 轮式里程计与激光雷达进行标定2--里程计运动学模型方法（理论+实现代码）_月照银海似蛟龙的博客-CSDN博客](https://blog.csdn.net/qq_32761549/article/details/121459451)
 
+#### 点云算法
+
+##### ICP
+
+Point-to-Plane不同于Point-to-Point的方法，它是求源点云中的点pi到目标点云中qi组成的曲面的距离。也就是说，此时点云需要提供每个点的法向量。
+
+数学表述
+
+[(七) 三维点云课程---ICP (Point-to-Plane)_point-to-plane icp-CSDN博客](https://blog.csdn.net/qq_45369294/article/details/121150122)
+
 ## 视觉相关
 
 ### 相机标定
@@ -516,7 +585,7 @@ XML+XSD、SOAP、WSDL就是构成 WebService 平台的三大技术。
 
 #### why 为什么要相机标定
 
-在图像测量过程以及机器视觉应用中，为确定空间物体表面某点的三维几何位置与其在图像中对应点之间的相互关系，必须建立相机成像的几何模型，这些几何模型参数就是相机参数。   
+在图像测量过程以及机器视觉应用中，为确定空间物体表面某点的三维几何位置与其在图像中对应点之间的相互关系，必须建立相机成像的几何模型，这些几何模型参数就是相机参数。
 
 * 进行摄像机标定的目的：求出相机的内、外参数，以及畸变参数。
 * 标定相机后通常是想做两件事：
@@ -532,7 +601,9 @@ XML+XSD、SOAP、WSDL就是构成 WebService 平台的三大技术。
 为什么相机标定很重要
 
 无论是在图像测量或者机器视觉应用中，相机参数的标定都是非常关键的环节，其标定结果的精度及算法的稳定性直接影响相机工作产生结果的准确性。因此，做好相机标定是做好后续工作的前提，提高标定精度是科研工作的重点所在。
+
 ### 图像处理
+
 #### 图像数据增强
 
 [(12条消息) 图像数据增强方法综述_heywhaleshequ的博客-CSDN博客_图像数据增强](https://blog.csdn.net/heywhaleshequ/article/details/104798004/)
@@ -571,7 +642,9 @@ APS为了快速响应客户需求，需要快速收敛、简洁的启发式算�
 5. **工单拆解法**
 
 ## 大模型时代算法
+
 ### 大模型常识
+
 #### 多模态
 
 多模态学习（Multimodal Learning）是一种利用来自不同感官或交互方式的数据进行学习的方法，这些数据模态可能包括文本、图像、音频、视频等。**多模态学习**通过融合多种数据模态来训练模型，从而提高模型的感知与理解能力，实现跨模态的信息交互与融合。
@@ -586,7 +659,7 @@ APS为了快速响应客户需求，需要快速收敛、简洁的启发式算�
 
 自然语言处理（NLP）的一个最伟大的方面是跨越多个领域的计算研究，从人工智能到计算语言学的多个计算研究领域都在研究计算机与人类语言之间的相互作用。
 
-NLP经历了4次重大变化 
+NLP经历了4次重大变化
 
 * **范式一：非神经网络时代的完全监督学习（特征工程）**
 * **范式二：基于神经网络的完全监督学习（架构工程）**
@@ -634,8 +707,6 @@ terminate called after throwing an instance of 'std::system_error'
 #### 前置声明
 
 在类B里面套用模板使用类A，A是前置声明数据库连接池
-
-
 
 #### 拷贝构造函数和赋值运算符
 
@@ -727,7 +798,7 @@ Substitution failure is not an error 作用就如它的名字一样，在编译�
 
 ##### C++11起
 
-* <random> std::discrete_distribution
+* `<random>` std::discrete_distribution
 
 `std::discrete_distribution` 产生区间 `[0, n)` 上的随机整数，其中每个单独整数 `i` 的概率定义为 *w
 i/S* ，即第 `i` 个整数的*权重*除以所有 `n` 个权重的和。
@@ -752,8 +823,6 @@ int main() {
     auto sampled_value = points[d(gen)];
 }
 ```
-
-
 
 # 现代数据格式
 

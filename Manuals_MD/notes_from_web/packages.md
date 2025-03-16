@@ -69,7 +69,7 @@ plt.show()
 
 ## scikit-learn
 
-[(12条消息) Windows环境下安装scikit-learn、is not a supported wheel错误解决、module 'pip' has no attribute 'pep425tags'错误解决_Ethiopia1024的博客-CSDN博客](https://blog.csdn.net/cinderella___/article/details/83030134)
+[(12条消息) Windows环境下安装scikit-learn、is not a supported wheel错误解决、module &#39;pip&#39; has no attribute &#39;pep425tags&#39;错误解决_Ethiopia1024的博客-CSDN博客](https://blog.csdn.net/cinderella___/article/details/83030134)
 
 ## sklearn
 
@@ -116,11 +116,9 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random
 
 [(13条消息) 【Python+OpenCV】捕捉笔记本和外接摄像头_望天边星宿的博客-CSDN博客](https://blog.csdn.net/See_Star/article/details/102808239)
 
-[(13条消息) （自己编写函数）Python + Opencv 图像增强,加噪滤波（椒盐,高斯噪音,3&5模版,均值.中值滤波处理）_一只没有脚的猪的博客-CSDN博客](https://blog.csdn.net/qq_38970783/article/details/90083402)
+[(13条消息) （自己编写函数）Python + Opencv 图像增强,加噪滤波（椒盐,高斯噪音,3&amp;5模版,均值.中值滤波处理）_一只没有脚的猪的博客-CSDN博客](https://blog.csdn.net/qq_38970783/article/details/90083402)
 
 [(13条消息) ubuntu 环境下python2.7和python3.5分别调用不同版本opencv的配置，及opencv的切换_lch_vision的博客-CSDN博客](https://blog.csdn.net/lch_vison/article/details/79112693)
-
-
 
 ## LabelMe
 
@@ -135,8 +133,6 @@ labelme是麻省理工（MIT）的计算机科学和人工智能实验室（CSAI
 https://dormousehole.readthedocs.io/en/latest/quickstart.html#id2
 
 https://blog.csdn.net/prigilm/article/details/121150950
-
-
 
 ## Django
 
@@ -206,7 +202,11 @@ Rospy是ROS对python的主要接口，通过Rospy [API](https://so.csdn.net/so/s
 
 [python的turtle库真好玩 - Vitamins - 博客园 (cnblogs.com)](https://www.cnblogs.com/zxysaigao/p/8465839.html)
 
+## Stable Diffusion
 
+**sd-webui-prompt-all-in-one**
+
+[一键入门到精通：sd-webui-prompt-all-in-one 项目大揭秘！ - 骑着单车滑翔 - 博客园](https://www.cnblogs.com/bicker/p/18002722)
 
 # ROS
 
@@ -220,7 +220,7 @@ Rospy是ROS对python的主要接口，通过Rospy [API](https://so.csdn.net/so/s
 
 [(13条消息) ROS_安装一个第三方仿真软件包——机器人模拟世界_凌川江雪的博客-CSDN博客](https://blog.csdn.net/aaLiweipeng/article/details/82948496)
 
-[(13条消息) Ubuntu18.04.1安装ROS（'E:无法定位软件包'）_天生我才&必有用的博客-CSDN博客](https://blog.csdn.net/zyc_csdn/article/details/89071714)
+[(13条消息) Ubuntu18.04.1安装ROS（&#39;E:无法定位软件包&#39;）_天生我才&amp;必有用的博客-CSDN博客](https://blog.csdn.net/zyc_csdn/article/details/89071714)
 
 [Ubuntu中安装ros中出现的安装catkin问题 - 好文 - 码工具 (matools.com)](https://www.matools.com/blog/190275039)
 
@@ -232,10 +232,10 @@ Rospy是ROS对python的主要接口，通过Rospy [API](https://so.csdn.net/so/s
 
 Apparently, when a ROS package has the same name as a python module, there is a conflict. Changing my packages's name to withings_pkg solved the problem.
 
-在上述连接的回答中，回答者提到了是由于在自己的workspace中有同名的包，当使用`source /devel/setup.bash`命令后，`rosrun`会指向自己同名的map_server包，因此当然就无法找到了。**而且迷惑人的是，在source后使用`roscd`命令查找map_server包还是会指向系统中安装的位置，而不是另一个workspace包的位置。**这就导致了较难发现同名包的问题。
- 回答者使用了命令`catkin_find --without-underlays --libexec --share map_server`找出了同名包的位置，我运行后的截图如下：
+在上述连接的回答中，回答者提到了是由于在自己的workspace中有同名的包，当使用 `source /devel/setup.bash`命令后，`rosrun`会指向自己同名的map_server包，因此当然就无法找到了。**而且迷惑人的是，在source后使用 `roscd`命令查找map_server包还是会指向系统中安装的位置，而不是另一个workspace包的位置。**这就导致了较难发现同名包的问题。
+ 回答者使用了命令 `catkin_find --without-underlays --libexec --share map_server`找出了同名包的位置，我运行后的截图如下：
 
-[Import Error:No module named rospkg - ROS Answers: Open Source Q&A Forum](https://answers.ros.org/question/86126/import-errorno-module-named-rospkg/)
+[Import Error:No module named rospkg - ROS Answers: Open Source Q&amp;A Forum](https://answers.ros.org/question/86126/import-errorno-module-named-rospkg/)
 
 ## 基本终端命令
 
@@ -270,8 +270,6 @@ FUERTE_GBPDISTRO_URL = 'https://ghproxy.com/xxx'
 gbpdistro_url = "https://ghproxy.com/" + gbpdistro_url
 ```
 
-
-
 ### rosnode
 
 ```bash
@@ -298,7 +296,7 @@ arg:=value # 如果launch文件中有待赋值的变量，可以通过这种方�
 rqt_console
 ```
 
-roslaunch 命令运行时首先会检测系统的`rosmaster`是否运行，如果已经启动，就用现有的 `rosmaster`；如果没有启动，会先启动`rosmaster`,然后再执行 launch 文件中的设置，一次性把多个节点按照我们预先的配置启动起来。launch 文件不需要编译，设置好之后可以直接用上述方式运行。
+roslaunch 命令运行时首先会检测系统的 `rosmaster`是否运行，如果已经启动，就用现有的 `rosmaster`；如果没有启动，会先启动 `rosmaster`,然后再执行 launch 文件中的设置，一次性把多个节点按照我们预先的配置启动起来。launch 文件不需要编译，设置好之后可以直接用上述方式运行。
 
 #### launch文件解析
 
@@ -332,7 +330,7 @@ roslaunch 命令运行时首先会检测系统的`rosmaster`是否运行，如�
 </launch>               <!--根标签-->
 ```
 
-<node>中除了pkg、type、name外还可以设置更多参数：
+`<node>`中除了pkg、type、name外还可以设置更多参数：
 
 ```xml
 <launch>
@@ -368,7 +366,7 @@ roslaunch 命令运行时首先会检测系统的`rosmaster`是否运行，如�
 
 在 launch 文件中常用的变量替换形式有两个
 
-- `$(find pkg)`： 例如`$(find rospy)/manifest.xml`. 如果可能，强烈推荐这种基于 package 的路径设置
+- `$(find pkg)`： 例如 `$(find rospy)/manifest.xml`. 如果可能，强烈推荐这种基于 package 的路径设置
 - `$(arg arg_name)`： 将此处替换成 `<arg>` tag 指定的 arg value
 
 ```xml
@@ -422,8 +420,6 @@ b: 2
 [(28条消息) ROS自定义msg类型以及使用_ros msg类型_Regan_Chai的博客-CSDN博客](https://blog.csdn.net/u012319441/article/details/78309781)
 
 [(28条消息) 详解常用的ROS内置消息类型_geometry_msgs/twist_我的大名王二狗的博客-CSDN博客](https://blog.csdn.net/qq_30193419/article/details/111867500)
-
-
 
 ## 语音功能包
 
@@ -484,7 +480,7 @@ roslaunch pocketsphinx robocup.launch
 
 ### 科大讯飞
 
-[ROS语音交互（三）科大讯飞语音在ROS平台下使用 - CAM& - 博客园 (cnblogs.com)](https://www.cnblogs.com/CZM-/p/6208415.html)
+[ROS语音交互（三）科大讯飞语音在ROS平台下使用 - CAM&amp; - 博客园 (cnblogs.com)](https://www.cnblogs.com/CZM-/p/6208415.html)
 
 [ROS与语音交互-科大讯飞语音SDK的ROS包使用（xf-ros ） - 创客智造 (ncnynl.com)](https://www.ncnynl.com/archives/201702/1287.html)
 
@@ -748,8 +744,6 @@ TODO 和librabbitmq相比对RabbitMQ的支持如何?
 
 ## Boost Asio
 
-
-
 ## OpenDDS
 
 OpenDDS是使用C++语言针对OMG数据分发服务(DDS)的一种开源实现。由OCI公司设计和维护，可从http://www.opendds.org/的OpenDDS社区门户中获得帮助。
@@ -827,8 +821,6 @@ registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
 # registry = "https://code.aliyun.com/rustcc/crates.io-index.git"
 ```
 
-
-
 ### MDBook
 
 ```shell
@@ -837,8 +829,6 @@ mdbook init [book_name]
 mdbook build
 mdbook serve --open
 ```
-
-
 
 # 开放源代码项目
 
@@ -852,7 +842,7 @@ Bazel是google内部构建工具Blaze的开源实现，也是一个基于artifac
 
 开源成为当前软件开发的主旋律。哪怕你是商业软件，也逃离不了社区的包围。如何方便地获取依赖，并做到平滑升级很重要。如果构建工具能够很方便地获取源代码，那就太好了。
 
-混合多语言编程成为一种选择。每种语言都有自己适用的场景，但是构建多语言的软件系统非常具有挑战性。例如，Python社区很喜欢搭配C/C++，[高性能计算](https://www.zhihu.com/search?q=高性能计算&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"answer"%2C"sourceId"%3A608614147})扔个Ｃ/C++，Python提供编程接口。如果构建工具能够无缝支持多语言构建，真的很方便。
+混合多语言编程成为一种选择。每种语言都有自己适用的场景，但是构建多语言的软件系统非常具有挑战性。例如，Python社区很喜欢搭配C/C++，[高性能计算](https://www.zhihu.com/search?q=高性能计算&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={)扔个Ｃ/C++，Python提供编程接口。如果构建工具能够无缝支持多语言构建，真的很方便。
 
 代码复用。我只想复用第三方的一个头文件，而不是整个系统。拒绝拷贝是优秀程序员的基本素养，如果构建工具能帮我方便地获取到所依赖的组件，剔除不必要的依赖，那就太完美了。
 
@@ -919,8 +909,6 @@ Protocol Buffers (a.k.a., protobuf) are Google's language-neutral, platform-neut
 
 [Caffe | Installation (berkeleyvision.org)](http://caffe.berkeleyvision.org/installation.html#compilation)
 
-
-
 [(28条消息) 【环境搭建】linux上编译安装caffe框架+Makefile.config文件详解_linux安装caffe_Zhang_Chen_的博客-CSDN博客](https://blog.csdn.net/Zhang_Chen_/article/details/87103908)
 
 ### MNN
@@ -959,8 +947,6 @@ Protocol Buffers (a.k.a., protobuf) are Google's language-neutral, platform-neut
 cat /usr/local/cuda/include/cudnn_version.h | grep CUDNN_MAJOR -A 2
 ```
 
-
-
 #### TensorRT
 
 TensorRT是nvidia家的一款高性能深度学习**推理SDK**。此SDK包含深度学习推理优化器和运行环境，可为深度学习推理应用提供低延迟和高吞吐量。在推理过程中，基于TensorRT的应用程序比仅仅使用CPU作为平台的应用程序要快40倍。
@@ -971,11 +957,8 @@ TensorRT是nvidia家的一款高性能深度学习**推理SDK**。此SDK包含�
 
 ## Others
 
-
-
 [anchuanxu/ROS-Academy-for-Beginners-Book-Melodic: 中国大学MOOC---《机器人操作系统入门》讲义，升级版本 (github.com)](https://github.com/anchuanxu/ROS-Academy-for-Beginners-Book-Melodic)
 
 [(13条消息) ubuntu16.04 gstreamer源码安装_春已暖花已开的博客-CSDN博客](https://blog.csdn.net/qq_39759656/article/details/80288988)
 
 [AdminLTE-开源网页前端](https://adminlte.io/docs/3.2/)
-
