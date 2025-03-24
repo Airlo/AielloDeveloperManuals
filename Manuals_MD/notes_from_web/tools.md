@@ -535,6 +535,38 @@ ALTER USER airlo000 WITH SUPERUSER;
 
 [Windows平台下安装MySQL数据库——最详细教程来啦！ - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/296292628#:~:text=Windows 下安装 MySQL 1 1.首先记住自己的压缩包解压在哪个文件目录（一定要记住MyS ... 2 2.然后进入计算机的环境变量,mysql 6 8.登陆旧密码登陆（第3步中的密码）： mysql -u ... 7 9.修改密码)
 
+#### 常用命令
+
+```shell
+# 登录mysql
+msyql -u {username} -p -h {hostip}
+```
+
+
+
+```mysql
+# 用户级操作
+CREATE USER {username}@{host} IDENTIFIED BY 'password';  # 增加新用户 
+# grant {permissions} on {database}.{table} to {username}@{host} identified by {password}
+# example: grant select,insert,update,delete on . to user@localhost identified by "password";
+GRANT ALL PRIVILEGES ON *.* TO {username}@{host} WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+SHOW GRANTS FOR {username}@{host};
+DROP USER {username}@{host};
+
+# 数据库操作
+show databases;  # 显示数据库列表
+use {database};  # 切换数据库
+SHOW TABLES;  # 显示数据库中的表
+create database {database_name};  # 创建数据库
+drop database {database_name};
+
+# 数据表操作
+describe {table_name};
+```
+
+
+
 ## NoSQL
 
 NoSQL 用于超大规模数据的存储（例如谷歌或 Facebook 每天为他们的用户收集万亿比特的数据）。这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。
