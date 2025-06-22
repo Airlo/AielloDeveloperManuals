@@ -14,18 +14,18 @@ I2C通信是一种同步串行通信方式，它有两根双向信号线。一�
 
 ### X.Org
 
-![alt text](20210205113128249.png)
+![alt text](./elements/knowledge/20210205113128249.png)
 
-![X server 会怎么做？](x-architecture.png)
+![X server 会怎么做？](./elements/knowledge/x-architecture.png)
 
-![Wayland 会怎么做？](wayland-architecture.png)
+![Wayland 会怎么做？](./elements/knowledge/wayland-architecture.png)
 ### Wayland
 Wayland是一个现代的窗口系统协议，最早由 Red Hat 的开发者 Kristian Høgsberg 于 2008 年提出，旨在取代老旧的 X11（X.Org），提供更流畅的图形性能、更好的安全性，并减少不必要的中间层。
 与X11不同，Wayland采用了全新的设计，它使用了更简单、更现代的协议和技术，可以提供更好的性能和安全性，并能更好地支持现代图形硬件。
 自从 Fedora 25 在 2016 年大胆地默认引入 Wayland 图形堆栈以来，它已作为多个 Linux 发行版的主要选项安装。如今，Wayland 已成为 Debian、Ubuntu、Fedora 和 Arch 等主流发行版的默认显示服务器，GNOME 和 KDE 也已经全面支持 Wayland。然而，尽管默认使用 Wayland 的桌面环境越来越多，许多应用程序仍然依赖 X11 旧有的 API，导致一些用户仍然对 Wayland 持观望态度。
 您甚至可能现在就在使用它！您可以通过打开终端并输入 echo $XDG_SESSION_TYPE 轻松检查这一点。
 如果您运行的是 GNOME，则无需执行任何操作，因为您的显示管理器 (GDM) 默认支持它。
-![alt text](v2-47d1fc69bb67a5c739aebda4ab8fa19f_1440w.png)
+![alt text](./elements/knowledge/v2-47d1fc69bb67a5c739aebda4ab8fa19f_1440w.png)
 ##### 什么是Wayland
 为了在屏幕上显示窗口并正确绘制其中的每个元素，Linux 需要一种与图形硬件和显示器进行通信的方法。从 1984 年到 2016 年，大多数发行版都使用称为“X 窗口系统核心协议”（或简称 X）的显示协议。 Wayland 出现在这一时期的末期，提供了一种更轻、更安全、更适合现代显示技术的替代方案。
 
@@ -55,7 +55,7 @@ Wayland取代X的进度已经完成很多，所有流行的用户界面库都已
 
 客户端应用需要移植到 Wayland 协议，或使用具有 Wayland 后端（如 GTK）的图形工具包，以便能够与基于 Wayland 的合成器和显示服务器原生工作。
 
-![alt text](v2-88bf8ef0aa4dc6b8a30dc5d2e0b79601_r.png)
+![alt text](./elements/knowledge/v2-88bf8ef0aa4dc6b8a30dc5d2e0b79601_r.png)
 
 [X 和 Wayland 的主要区别](https://sh.alynx.one/posts/Difference-between-X-and-Wayland/)
 [X 中的混成器與 Composite 擴展](https://farseerfc.me/compositor-in-X-and-compositext.html)
@@ -282,7 +282,7 @@ cybernetics 希腊语cybernétique，最早可以在柏拉图的著作《理想�
 
 在维纳的著作中，它所代表的含义是：动物或者机器的沟通与控制，所局限的研究对象不仅仅是机器，也包括动物，同时其研究兴趣不仅仅在控制也包括了沟通（通讯）。而且更有意思的是，它不仅仅是机器与机器，还包括机器与动物之间的沟通和交流。
 [控制理论（control theory）和控制论（cybernetic）是同一个东西吗，有什么区别?](https://www.zhihu.com/question/434383360)
-![Cyber-Physical: the Nature of "Controls"](Screenshot_20211208_172051_tv.danmaku.bili.jpg)
+![Cyber-Physical: the Nature of "Controls"](./elements/knowledge/Screenshot_20211208_172051_tv.danmaku.bili.jpg)
 ## 机器人控制
 
 ### FK和IK
@@ -646,14 +646,14 @@ DQN、DDPG、A3C等
 
 [(28条消息) 【python+ROS+路径规划】二、理解并处理地图数据_薯一个蜂蜜牛奶味的愿的博客-CSDN博客](https://blog.csdn.net/w_w_y/article/details/122736739)
 
-![Nav Core](v2-88bf8ef0aa4dc6b8a30dc5d2e0b79601_r-1.png)
+![Nav Core](./elements/knowledge/v2-88bf8ef0aa4dc6b8a30dc5d2e0b79601_r-1.png)
 
 #### 代价地图
-![地图层](20200201191858626.png)
-![内部主要类](16588463485510.png)
-![alt text](20200202164903843.png)
-![alt text](20200202230758394.png)
-![alt text](20200307192116169.png)
+![地图层](./elements/knowledge/20200201191858626.png)
+![内部主要类](./elements/knowledge/16588463485510.png)
+![alt text](./elements/knowledge/20200202164903843.png)
+![alt text](./elements/knowledge/20200202230758394.png)
+![alt text](./elements/knowledge/20200307192116169.png)
 
 ### 定位与感知
 
@@ -675,7 +675,7 @@ DQN、DDPG、A3C等
 
 #### TEB
 开源于 technische universitat dortmund (rstu)
-![alt text](Screenshot_20220727_065833_com.microsoft.emmx.jpg)
+![alt text](./elements/knowledge/Screenshot_20220727_065833_com.microsoft.emmx.jpg)
 
 [(12条消息) TEB局部路径规划 computeVelocityCommands代码解析_COCO_PEAK_NOODLE的博客-CSDN博客](https://blog.csdn.net/windxf/article/details/110039280)
 
