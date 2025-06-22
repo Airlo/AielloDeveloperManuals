@@ -232,8 +232,30 @@ source ~/.bashrc  # 或者~/.zshrc 根据 echo $0 出来的shell确定
 # 通过 echo ~ 可以看到代表的用户目录
 echo ~  # 比如/home/aiello
 ```
+#### .zprofile, .zshrc和.zshenv之间的区别
+~/.zprofile是这些启动文件和关机文件中的一个. 它在登录时被读取. 它的兄弟文件~/.zshrc则是在交互时读取.
+因为~/.zprofile 只在登录时加载一次, 所以最好把只加载一次的东西放进里面, 之后还能被子shell继承, 比如环境变量, 这是非常好的例子.
+在另一方面,  ~/.zshrc通常会保留那些不能被子shell继承的东西, 比如别名和函数, 自定义提示, 历史自定义等等. 除此之外, 每次启动新shell都会运行的命令应该被放进 ~/.zshrc 文件.
 
+* ~/.zprofile vs ~/.zlogin
+两者做相同的事件, 即为登录式shell设置环境. 唯一的不同是加载的时间不同. 最佳实践是总是使用 ~/.zprofile
 
+* ~/.zshrc
+.zshrc为交互式shell设置环境, 并且在 .zprofile 之后加载. .zshrc 将会覆盖在 .zprofile 中设置的任何东西. 这是个好地方, 可以用来定义登录式和交互式shell的别名和函数.
+
+* ~/.zshenv
+不管shell是登录式, 交互式或者其它任何类型, ~/.zshenv最先被读取而且每次都会读取. 推荐在这里设置环境变量.对于Z-shell而言, ~/.zshenv 是另一个存储环境变量的好的地方. ~/.zshenv 总会被加载
+
+* ~/.zlogout
+~/.zlogout 会在登出会话的时候被读取. 在这里做清理工作很重要.
+
+作者：bytebeats
+链接：https://juejin.cn/post/7128574050406367269
+来源：稀土掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+##### 载入顺序
+.zshenv → .zprofile → .zshrc → .zlogin → .zlogout
 
 ## 服务service管理
 
@@ -413,6 +435,9 @@ sudo /etc/init.d/xinetd restart
 
 [XServer基本概念+x11vnc配置远程桌面](https://blog.csdn.net/lovewangtaotao/article/details/102907540?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-1-102907540-blog-124450634.pc_relevant_default&spm=1001.2101.3001.4242.2&utm_relevant_index=4)
 
+##### X11
+X11是一个最初于1987年开发的窗口系统协议，被广泛用于Linux和其他UNIX系统上。它使用了传统的客户端-服务器模型，其中应用程序（客户端）向X11服务器发送请求，服务器处理这些请求并将应用程序的图形显示在屏幕上。然而，X11存在一些问题，例如难以调试、设计不安全和性能问题等。
+
 ##### gdm.service
 
 ###### Q1. ubuntu18.04无法正常启动gdm3
@@ -571,7 +596,11 @@ echo $SHELL # 查看当前使用的shell类型
 ps -p $$ # 查看当前使用的shell类型
 bash --version # 查看bash的版本
 ```
+### 登录式Shell和响应式Shell
+登陆登录式shell能够从命令行ps -f中识别出来
+响应式非登录shell通常是一个shell环境, 你可以从中读写(比如, 典型的终端会话).
 
+响应式非登录shell则能够从登录式shell中触发, 比如当你写出zsh并且压入命令行时. 或者当你打开新的终端tab的时候.
 ### sh脚本
 
 当Shell执行一个程序时会要求UNIX内核启动一个新的进程来执行指定的程序
@@ -919,7 +948,6 @@ pgrep firefox  # 直接根据Firefox查询进程的PID
 find ./* -type f -exec touch {} \;
 find ./* -type d -exec touch {} \;
 
-
 lspci | grep -i nvidia  # 查看pci连接设备型号 如nvidia显卡
 ubuntu-drivers devices  # 查看设备对应推荐驱动型号
 nvidia-smi  # 查看已安装的显卡驱动信息 需要安装nvidia显卡驱动
@@ -933,9 +961,11 @@ route -n  # 查看路由表
 netstat -lntp  # 查看所有监听端口 
 netstat -antp  # 查看所有已经建立的连接
 sudo /etc/init.d/networking restart  # 更新网络
+echo $XDG_SESSION_TYPE  # 查看窗口系统协议
+ps aux | grep gnome-session  # 验证是否使用 GNOME 桌面
+gnome-about --gnome-version  # 查看 gnome 版本
+apt-cache show gnome-shell | grep Version  # 对于未安装 gnome-shell 的 Ubuntu 查看 gnome 版本
 ```
-
-
 
 ## 效率加速
 
@@ -986,6 +1016,36 @@ echo "source /usr/share/powerlevel9k/powerlevel9k.zsh-theme" >> ~/.zshrc
 ```
 #### oh-my-zsh
 
+##### 安装
+1. 下载安装
+```shell
+# 更新软件源
+sudo apt update
+# 安装 zsh git curl
+sudo apt install zsh git curl -y
+# 设置使用zsh终端，注意不加sudo
+chsh -s /bin/zsh
+
+# 国内镜像 curl
+sh -c "$(curl -fsSL https://gitee.com/pocmon/ohmyzsh/raw/master/tools/install.sh)"
+# 国内镜像 wget
+sh -c "$(wget -O- https://gitee.com/pocmon/ohmyzsh/raw/master/tools/install.sh)"
+
+# 卸载
+uninstall_oh_my_zsh
+# 手动更新
+upgrade_oh_my_zsh
+```
+2. 迁移配置
+```shell
+# 查看bash配置文件，并手动复制自定义配置
+cat ~/.bashrc
+# 编辑zsh配置文件，并粘贴自定义配置
+nano ~/.zshrc
+# 启动新的zsh配置
+source ~/.zshrc
+```
+3. 配置
 ```shell
 # 设置oh-my-zsh不读取文件变化信息
 git config --add oh-my-zsh.hide-dirty 1
@@ -994,8 +1054,51 @@ git config --add oh-my-zsh.hide-status 1
 # 全局设置
 git config --global oh-my-zsh.hide-status 1
 
-```
+# 为 curl wget git 等设置代理 假设端口为 1089
+proxy () {
+  export ALL_PROXY="socks5://127.0.0.1:1089"
+  export all_proxy="socks5://127.0.0.1:1089"
+}
+# 取消代理
+unproxy () {
+  unset ALL_PROXY
+  unset all_proxy
+}
+# 以后在使用 git 等命令之前，只需要在终端中输入 proxy 命令，即可使用本地代理
 
+# wsl中 假设宿主机局域网 http 代理的端口是10811
+host_ip=$(cat /etc/resolv.conf |grep "nameserver" |cut -f 2 -d " ")
+# 为 curl wget git npm apt 等设置代理
+proxy () {
+  export ALL_PROXY="http://$host_ip:10811"
+  export all_proxy="http://$host_ip:10811"
+ # echo -e "Acquire::http::Proxy \"http://$host_ip:10811\";" | sudo tee -a /etc/apt/apt.conf > /dev/null
+ # echo -e "Acquire::https::Proxy \"http://$host_ip:10811\";" | sudo tee -a /etc/apt/apt.conf > /dev/null
+}
+
+# 取消代理
+unproxy () {
+  unset ALL_PROXY
+  unset all_proxy
+ # sudo sed -i -e '/Acquire::http::Proxy/d' /etc/apt/apt.conf
+ # sudo sed -i -e '/Acquire::https::Proxy/d' /etc/apt/apt.conf
+}
+```
+4. 下载主题与插件
+```shell
+# 以 powerlevel10k 主题为例
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+# 中国用户可以使用 gitee.com 上的官方镜像加速下载
+git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+# 把插件下载到本地的 ~/.oh-my-zsh/custom/plugins 目录
+# zsh-syntax-highlighting 是一个命令语法校验插件，在输入命令的过程中，若指令不合法，则指令显示为红色，若指令合法就会显示为绿色
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+# 在 ~/.zshrc 启用插件
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting z extract web-search)
+```
 
 
 #### 高效命令行
@@ -1191,10 +1294,38 @@ sudo chmod +x /usr/share/applications/pycharm.desktop
 
 ### 双系统时间不一致
 
-https://wenku.baidu.com/view/6a95bf051a2e453610661ed9ad51f01dc2815788.html
+### 其他效率软件
+#### indicator-sysmonitor
+1. 源码编译安装（适用所有版本）
+```shell
+sudo apt install python3-psutil gir1.2-appindicator3-0.1
+git clone https://github.com/fossfreedom/indicator-sysmonitor.git
+cd indicator-sysmonitor
+sudo make install
+```
 
-http://wjhsh.net/bluestorm-p-4899274.html
+2. apt安装（更适用于Ubuntu20.04及此前的版本）
+```shell
+# 添加软件源 更新 安装
+sudo add-apt-repository ppa:fossfreedom/indicator-sysmonitor -y
+sudo apt update
+sudo apt install indicator-sysmonitor
+```
+#### htop 和 nmon
+```shell
+sudo apt update
+sudo apt install htop
+htop
 
+sudo apt update
+sudo apt install nmon
+nmon
+```
+#### gnome-tweaks
+运行Tweaks可将需要开机启动的软件加入进去
+
+#### pulseaudio
+pulseaudio 是一个POSIX操作系统上的声音系统。是音频应用的代理。它允许你对音频数据，在从应用传递到硬件的过程中，做更多的操作。像把音频数据传递到另一台机器，更改采样率，声道，多路音频混音等。
 # Windows
 
 ## 安装
@@ -1222,6 +1353,10 @@ delete partition override # 在当前磁盘分区下进行操作，删除当前�
 
 [桌面美化之 windows10 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/102859469)
 
+[自定义你的 GNOME 桌面主题 | Linux 中国](https://zhuanlan.zhihu.com/p/219816152)
+
+[更漂亮的GNOME 顶部栏系统负载（CPU、RAM 等）指示器](https://www.ufans.top/index.php/archives/726/)
+
 ## 版本冲突与共存
 
 ### Java
@@ -1243,6 +1378,8 @@ delete partition override # 在当前磁盘分区下进行操作，删除当前�
 [windows11升级失败0x80070003错误某些更新文件缺失或出现问题。我们将尝试稍后重新下载更新](https://zhuanlan.zhihu.com/p/586955701)
 
 我是在windows10上遇到的问题,原因应该和双系统的引导有关,windows无法正常完成日常更新导致无法再进行更新,最终gg
+#### [WinError 10013]以一种访问权限不允许的方式做了一个访问套接字的尝试
+就是端口被占用
 
 # WSL
 

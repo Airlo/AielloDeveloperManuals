@@ -9,7 +9,60 @@
 [(12条消息) I2C串口通信_pyromaniac的博客-CSDN博客_i2c串口通信](https://blog.csdn.net/pyromaniac/article/details/78746255)
 
 I2C通信是一种同步串行通信方式，它有两根双向信号线。一根是数据线SDA（serial data I/O），另一根是时钟线SCL（serial clock）。IIC总线上可以挂多个器件，而每个器件都有唯一的地址，这样可以标识通信目标。数据的通信的方式采用主从方式，主机负责主动联系从机，而从机则被动回应数据。
+## 图形化
+### X.Org
+### Wayland
+Wayland是一个现代的窗口系统协议，最早由 Red Hat 的开发者 Kristian Høgsberg 于 2008 年提出，旨在取代老旧的 X11（X.Org），提供更流畅的图形性能、更好的安全性，并减少不必要的中间层。
+与X11不同，Wayland采用了全新的设计，它使用了更简单、更现代的协议和技术，可以提供更好的性能和安全性，并能更好地支持现代图形硬件。
+自从 Fedora 25 在 2016 年大胆地默认引入 Wayland 图形堆栈以来，它已作为多个 Linux 发行版的主要选项安装。如今，Wayland 已成为 Debian、Ubuntu、Fedora 和 Arch 等主流发行版的默认显示服务器，GNOME 和 KDE 也已经全面支持 Wayland。然而，尽管默认使用 Wayland 的桌面环境越来越多，许多应用程序仍然依赖 X11 旧有的 API，导致一些用户仍然对 Wayland 持观望态度。
+您甚至可能现在就在使用它！您可以通过打开终端并输入 echo $XDG_SESSION_TYPE 轻松检查这一点。
+如果您运行的是 GNOME，则无需执行任何操作，因为您的显示管理器 (GDM) 默认支持它。
 
+##### 什么是Wayland
+为了在屏幕上显示窗口并正确绘制其中的每个元素，Linux 需要一种与图形硬件和显示器进行通信的方法。从 1984 年到 2016 年，大多数发行版都使用称为“X 窗口系统核心协议”（或简称 X）的显示协议。 Wayland 出现在这一时期的末期，提供了一种更轻、更安全、更适合现代显示技术的替代方案。
+
+不过，显示协议本身无法在屏幕上绘制内容。它们需要在称为显示服务器的软件中实现。对于 X 来说，很长一段时间以来的卫冕冠军都是 Xorg。
+
+在 Wayland 中，显示服务器通常只是桌面环境使用的窗口管理器。对于 GNOME 来说，就是 Mutter。在 KDE Plasma 中，它是 KWin。窗口管理器不是使用单独的独立进程来运行服务器，而是调用系统内的库来与图形硬件进行通信。在大多数情况下，这将是 wlroots。
+
+例如，这允许 GNOME 的 Mutter 直接将数据写入帧缓冲区，而不是使用中间人（很像 Xorg 的使用方式），从而切实提高性能。
+##### Wayland如何运作
+显示服务器向内核和图形硬件提供信息，以便它们可以快速将信息传递到显示器。他们通过使用各自协议与他们通信的应用程序接收此信息。例如，设计用于 X 的应用程序无法与 Wayland 服务器通信。
+
+Wayland 通过称为 XWayland 的东西解决了这个问题，它充当兼容层，允许 X 客户端-服务器交互转换为 Wayland 可以“理解”的东西。
+
+在 Wayland 中，服务器和合成器是同一个。每个使用 Wayland 的桌面环境都会调用实现 Wayland 协议的库来绘制效果，例如透明度、窗口模糊、过渡动画和阴影，从而使窗口具有维度感。
+
+Wayland 使所有这些功能更接近内核，您通常会通过在图形环境中体验到的“流畅性”来感受到这一点。
+
+Wayland 不是通过使用第三方软件进行绘制，而是调用内核中的直接渲染管理器 (DRM) 缓冲区来绘制内容。
+
+您可能会注意到，在 Wayland 中，步骤要简单得多，过程也简单明了。这可以在图形密集的情况下实现更高的性能，并使开发人员更轻松地开发在此协议下运行的应用程序。
+##### X和Wayland
+X与Wayland的主要差异，就是X系统中存在一个X服务器（通常用的是Xorg）。X服务器日理万机，每个窗口的所有控件他都要知道，一边接受鼠标键盘等输入设备的信号，一边找窗口管理器要窗口的位置，计算哪个位置需要更新，也是他负责让显卡绘图。还要有个专门的合成管理器往窗口旁边画影子（有的窗口管理器也顺便兼职了）。一开始这套系统还行，但是后来随着技术的发展他要管的事越来越多，因此不断地打补丁，造成维护麻烦。
+
+到Wayland这里就简单多了，服务端没有那么多多弯弯绕绕，只要Wayland合成器（X系统中的窗口管理器），接受到输入信号直接发给窗口，让应用程序自己处理输入和绘图，画完以后把图给合成器，合成器再把各个窗口的图叠到一起去显示出来。这样做另一个好处就是各个应用程序之间是隔离的，每个应用程序只知道自己窗口的情况，提高了安全性。
+
+Wayland取代X的进度已经完成很多，所有流行的用户界面库都已经支持Wayland，对于一些不支持Wayland的程序，解决方案是用一个运行在Wayland中的X服务器XWayland来兼容。对Wayland支持最激进的桌面是GNOME，多年前他就默认向用户提供Wayland会话，而KDE虽然也提供了Wayland会话，但是默认选择的还是X11。虽然Wayland协议还在发展，一些在X11中已经完善的特性Wayland还没有补全，但是Wayland也有一些X11不支持的功能，比如GNOME桌面的触摸板手势。
+
+客户端应用需要移植到 Wayland 协议，或使用具有 Wayland 后端（如 GTK）的图形工具包，以便能够与基于 Wayland 的合成器和显示服务器原生工作。
+
+[X 和 Wayland 的主要区别](https://sh.alynx.one/posts/Difference-between-X-and-Wayland/)
+[X 中的混成器與 Composite 擴展](https://farseerfc.me/compositor-in-X-and-compositext.html)
+[Play, don't show](https://magcius.github.io/xplain/article/)
+
+##### XWayland
+XWayland是Wayland协议的一个实现，它允许在Wayland服务器上运行X11应用程序。简单来说，XWayland是Wayland和X11之间的兼容层，它允许在Wayland环境中运行使用X11协议编写的应用程序。
+
+由于很多应用程序还是基于X11协议编写的，为了使它们能够在Wayland环境中运行，XWayland作为一个兼容层被开发出来。当需要运行使用X11协议编写的应用程序时，Wayland服务器会启动XWayland进程，然后将这些应用程序的窗口显示在Wayland的窗口管理器中。这样，用户就可以在Wayland环境中使用使用X11协议编写的应用程序了。
+
+作者：睡不醒的法斗
+链接：https://www.zhihu.com/question/588353512/answer/2927433343
+来源：知乎
+
+无法移植到 Wayland 的传统 X11 应用程序将自动使用 Xwayland 作为 X11 传统客户端和 Wayland 合成器之间的代理。XWayland 同时作为 X11 服务器和 Wayland 客户端。Xwayland 的角色是将 X11 协议转换为 Wayland 协议，从而使旧的X11 应用程序可以与基于 Wayland 的显示服务器一起工作。
+
+在 GNOME Shell on Wayland 上，Xwayland 在启动时自动启动，这样可确保大多数 X11 传统应用程序在使用 GNOME Shell on Wayland 时能按预期工作。但是，X11 和 Wayland 协议不同，因此某些依赖于 X11 特定功能的客户端在 Xwayland 下的行为可能有所不同。对于这些特定的客户端，您可以切换到 http://X.Org 显示服务器。（举例）
 ## 网络
 
 ### 层2和层3
@@ -347,7 +400,7 @@ DDS 是一种端到端中间件，提供与 ROS 系统相关的功能，例如�
 DDS的实现又有很多种例如： RTI 的Connext DDS、eProsima 的Fast DDS、Eclipse 的Cyclone DDS或 GurumNetworks 的GurumDDS。ubuntu20.04 Foxy 默认的是FastDDS无需额外安装即可使用。
 
 [cyclonedds库的简单介绍](https://feetingtimes.github.io/posts/cyclonedds-introduction/)
-
+[cyclonedds使用介绍](https://blog.csdn.net/jluliuchao/article/details/143240372)
 #### SOME/IP
 
 Scalable service-Oriented Middleware over IP，即基于IP协议的面向服务的可扩展通信中间件。具体来说，它是一种用于汽车内部不同电子控制单元（ECUs）之间通信的协议，由宝马集团在2011年设计并推出。SOME/IP作为中间件，支持多种编程语言和平台，提供高效的序列化和反序列化机制，支持服务发现，并能与安全协议结合使用以确保数据传输的安全。
@@ -703,7 +756,55 @@ terminate called after throwing an instance of 'std::system_error'
 # 编程语言底层逻辑
 
 ## C++
+### 1. 历史革新(std标准)
+#### C++11标准
 
+* `<random>` std::discrete_distribution
+
+`std::discrete_distribution` 产生区间 `[0, n)` 上的随机整数，其中每个单独整数 `i` 的概率定义为 *w
+i/S* ，即第 `i` 个整数的*权重*除以所有 `n` 个权重的和。
+
+`std::discrete_distribution` 满足[*随机数分布* *(RandomNumberDistribution)* ](https://www.apiref.com/cpp-zh/cpp/named_req/RandomNumberDistribution.html)的所有要求。
+
+```c++
+#include <random>
+#include <vector>
+
+struct Point {};
+
+int main() {
+    std::mt19937 gen(std::random_device{}());
+
+    std::vector<double> chances{1.0, 2.0, 3.0};
+    // Initialize to same length.
+    std::vector<Point> points(chances.size());
+    // size_t is suitable for indexing.
+    std::discrete_distribution<std::size_t> d{chances.begin(), chances.end()};
+
+    auto sampled_value = points[d(gen)];
+}
+```
+#### C++17标准
+C++17是C++编程语言的一个重要版本，于2017年12月正式发布。它在C++11和C++14的基础上继续完善和扩展C++语言特性和标准库组件。C++17的主要目标是进一步提高C++程序的性能、可用性和安全性，同时引入一些新的编程范式，使C++编程更加现代化和高效。
+C++17包含许多新特性，如if constexpr、structured bindings、constexpr lambda等，以及标准库的扩展，如std::optional、std::variant、std::filesystem等。这些特性旨在简化C++代码的编写，提高代码质量和运行时性能。
+##### C++17相对于C++14的改进与新增特性概述
+C++17在C++14的基础上引入了许多改进和新增特性。主要的语言特性和库扩展包括：
+1. if constexpr：允许编译时条件编译，简化模板元编程。
+2. structured bindings：简化多返回值的处理和局部变量的声明。
+3. constexpr lambda：允许在编译时使用Lambda表达式。
+4. inline variables：允许在头文件中定义内联变量，简化类静态成员的使用。
+5. std::optional：提供可选值的封装，避免空指针问题。
+6. std::variant：支持类型安全的多类型容器。
+7. std::any：提供类型擦除功能，允许存储任意类型的对象。
+8. std::filesystem：提供跨平台文件系统操作支持。
+9. std::invoke：统一对函数、函数指针、成员函数指针等可调用对象的调用语法。
+10. std::string_view：高效地引用字符串片段，提高字符串处理性能。
+11. std::shared_mutex和std::shared_lock：提供共享锁定机制，提高并发性能。
+12. std::byte：提供类型安全的字节类型，用于表示原始内存数据。
+以上特性和库扩展为C++编程带来了更强大的功能和更简洁的语法，使C++代码更加优雅、可读和高效。
+
+[【C++ 17 新特性 】拥抱现代C++：深入C++17特性以获得更高效、更安全的代码](https://developer.aliyun.com/article/1463279)
+### 2. 概念直击
 #### 前置声明
 
 在类B里面套用模板使用类A，A是前置声明数据库连接池
@@ -793,36 +894,6 @@ Substitution failure is not an error 作用就如它的名字一样，在编译�
 临时对象就是无名对象，在语句行上直接用类生成一个对象，
 它的生命周期是在该行创建，又在该行销毁。
 对于一个已经销毁或行将销毁的对象，你拿到它的地址是没有意义的，所以编译器这个婆婆就武断的告诉你，别拿这个地址，你拿它没有用，不许拿，它是临时对象地址
-
-#### std标准
-
-##### C++11起
-
-* `<random>` std::discrete_distribution
-
-`std::discrete_distribution` 产生区间 `[0, n)` 上的随机整数，其中每个单独整数 `i` 的概率定义为 *w
-i/S* ，即第 `i` 个整数的*权重*除以所有 `n` 个权重的和。
-
-`std::discrete_distribution` 满足[*随机数分布* *(RandomNumberDistribution)* ](https://www.apiref.com/cpp-zh/cpp/named_req/RandomNumberDistribution.html)的所有要求。
-
-```c++
-#include <random>
-#include <vector>
-
-struct Point {};
-
-int main() {
-    std::mt19937 gen(std::random_device{}());
-
-    std::vector<double> chances{1.0, 2.0, 3.0};
-    // Initialize to same length.
-    std::vector<Point> points(chances.size());
-    // size_t is suitable for indexing.
-    std::discrete_distribution<std::size_t> d{chances.begin(), chances.end()};
-
-    auto sampled_value = points[d(gen)];
-}
-```
 
 # 现代数据格式
 

@@ -955,6 +955,19 @@ TensorRT是nvidia家的一款高性能深度学习**推理SDK**。此SDK包含�
 
 [(28条消息) 乌班图 18.04 tensorRT安装踩坑_代码大萝卜的博客-CSDN博客](https://blog.csdn.net/ws18921818762/article/details/103006076)
 
+## Web
+### OpenSSL
+补回头文件和库文件
+```shell
+# 查看当前apt-get下载源节点里libssl-dev可下载安装的所有版本，和默认的最合适的版本
+sudo apt-cache policy libssl-dev
+ 
+# 下载并默认安装libssl-dev（默认的版本）
+sudo apt install libssl-dev
+ 
+# 如果要指定安装某个版本
+sudo apt install libssl-dev=版本号
+```
 ## Others
 
 [anchuanxu/ROS-Academy-for-Beginners-Book-Melodic: 中国大学MOOC---《机器人操作系统入门》讲义，升级版本 (github.com)](https://github.com/anchuanxu/ROS-Academy-for-Beginners-Book-Melodic)

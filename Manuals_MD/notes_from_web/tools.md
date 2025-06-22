@@ -51,7 +51,8 @@ conda update --all
 conda search ${search_term}
 ```
 
-conda环境跨平台迁移问题ResolvePackageNotFound
+#### 疑难杂症
+##### conda环境跨平台迁移问题ResolvePackageNotFound
 
 ```shell
 # 1. 清除定制版本信息
@@ -78,7 +79,41 @@ get-ExecutionPolicy
 set-ExecutionPolicy RemoteSigned
 # 重启powershell
 ```
+##### 安装依赖包时Installing pip dependencies过慢的问题
+使用conda env create -f environment.yml安装依赖包时，会遇到Installing pip dependencies过慢的问题。这是由于没有使用镜像源
+可以尝试对environment.yml文件进行以下修改，添加镜像源即可：
+将channels改为（注意要把default去掉）：
+```yaml
+channels:
+  - conda-forge
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/pro
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+  # ....
+  # 并在pip的依赖包里添加上镜像源（注意最后一行）
+  - pip:
+    - addict==2.4.0
+    - anyio==3.3.0
+	.......
+    - websocket-client==1.1.0
+    - widgetsnbextension==3.5.1
+    - sapien==1.1.1
+    - -i https://pypi.tuna.tsinghua.edu.cn/simple
 
+```
+
+### 在Linux下安装miniconda
+```shell
+# 在清华镜像当中寻找的脚本。这里找脚本真的十分方便，我十分推荐
+wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh
+chmod +x Miniconda3-latest-Linux-x86_64.sh 
+sudo ./Miniconda3-latest-Linux-x86_64.sh 
+# 软件包一般安装到/opt下，故进行 /opt/miniconda3 设置，如果还需要安装 ros2 则不进行初始化
+# 添加环境变量到~/.zshrc
+export PATH="/opt/miniconda3/bin:$PATH"
+```
 ## jupyter notebook
 
 Jupyter Notebook是基于网页的用于交互计算的应用程序。其可被应用于全过程计算：开发、文档编写、运行代码和展示结果。
@@ -1376,21 +1411,65 @@ https://www.cnblogs.com/breka/p/9951505.html
 
 ② 单独输入小っ的时候可以使用直接输入ltu或者xtu
 
-### Ubuntu Google 中文输入法
+### Ubuntu 中文输入法 Fcitx5
 
 https://zhuanlan.zhihu.com/p/529892064
 
 因为自带的IBus运行卡顿效率极低，转用支持谷歌拼音和搜狗拼音的Fcitx框架
-
+1. 检查系统中文环境
+在 Ubuntu 设置中打开「区域与语言」—— 「管理已安装的语言」，然后会自动检查已安装语言是否完整。若不完整，根据提示安装即可。
+2. 最小安装
+为使用 Fcitx 5，需要安装三部分基本内容：
+Fcitx 5 主程序
+中文输入法引擎
+图形界面相关
 ```shell
 # 可以检查一下fcitx框架是否安装
 fcitx --version
-sudo apt-get install fcitx-bin
-sudo apt-get install fcitx-table 
-sudo apt-get install fcitx-table-all  # 非必须，包含fcitx-table和fcitx-pinyin、五笔、五笔拼音等等
-sudo apt-get install fcitx-googlepinyin  # 安装谷歌拼音
-```
 
+sudo apt install fcitx-bin
+sudo apt install fcitx-table 
+sudo apt install fcitx-table-all  # 非必须，包含fcitx-table和fcitx-pinyin、五笔、五笔拼音等等
+sudo apt install fcitx-googlepinyin  # 安装谷歌拼音
+sudo cp /usr/share/applications/fcitx.desktop /etc/xdg/autostart/  # 设置开机自启动
+sudo apt purge ibus  # 卸载ibus，需要，同时存在会发生冲突
+
+# fcitx5 和 fcitx 无法共存
+sudo apt install fcitx5 \
+fcitx5-chinese-addons \
+fcitx5-frontend-gtk3 fcitx5-frontend-gtk2 \
+fcitx5-frontend-qt5 kde-config-fcitx5
+
+```
+3. 中文词库
+```shell
+# 下载词库文件
+wget https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.2.4/zhwiki-20220416.dict
+# 创建存储目录
+mkdir ~/.local/share/fcitx5/pinyin/dictionaries/
+# 移动词库文件至该目录
+mv zhwiki-20220416.dict ~/.local/share/fcitx5/pinyin/dictionaries/
+```
+4. 配置与环境变量
+```shell
+im-config # 根据提示设置输入法为 Fcitx5
+
+# 写入如下环境变量值
+# 如果使用 Bash 作为 shell，则建议写入至 ~/.bash_profile，这样只对当前用户生效，而不影响其他用户。
+# 另一个可以写入此配置的文件为系统级的 /etc/profile
+export XMODIFIERS=@im=fcitx
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+
+# 图形化配置
+fcitx5-configtool
+```
+5. 一些bug
+edge浏览器中可能无法使用Fcitx5输入中文，和wayland有关
+```
+使用中发现edge浏览器字体模糊发虚，一度以为自己眼睛老化了（确实有点老花了）。网上搜了一下，说是要在Exec后面加--ozone-platform=wayland。
+加了以后注销重新登录，edge字体清晰了，但又发现fcitx5-pinyin无法在edge浏览器中输入汉字了！又是网上一通搜，找到了解决方案，在Exec后面再加上--gtk-version=4，重启后，拼音输入也正常了，说明fcitx5、wayland与应用之间还需要时间磨合。(2024-11-30)
+```
 # Wireshark 
 ```shell
 # 添加wireshark用户组
@@ -1622,3 +1701,64 @@ server {
 # EAC
 
 [实体CD无损翻录/抓轨的通用教程（通过Exact Audio Copy）](https://www.bilibili.com/opus/925630344961458181)
+
+# gettext
+随着全球化的发展，多语言编程变得日益重要。gettext 是一个强大的国际化（i18n）和本地化（l10n）工具，可以帮助开发者轻松实现应用程序的多语言支持。
+gettext 是一个开源的国际化工具，它提供了将文本字符串翻译成不同语言的功能。使用 gettext，开发者可以轻松地将应用程序本地化为多种语言，提高应用程序的可用性和用户满意度。
+```shell
+sudo apt update
+sudo apt install gettext
+gettext --version
+```
+### 使用gettext
+#### po国际化文件
+gettext 使用 PO（Portable Object）文件来存储翻译文本。以下是一个简单的国际化文件示例：
+```po
+# file: messages.po
+msgid ""
+msgstr ""
+"Project-Id-Version: MyProject\n"
+"POT-Creation-Date: 2023-03-15 10:00+0800\n"
+"PO-Revision-Date: 2023-03-15 10:00+0800\n"
+"Last-Translator: Your Name <your_email@example.com>\n"
+"Language-Team: your_language <your_language@example.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Hello, world!"
+msgstr "你好，世界！"
+```
+#### 翻译文件
+使用 msginit 命令创建一个空白的翻译文件：
+```shell
+msginit -i messages.po -o messages_zh_CN.po
+```
+然后，编辑 messages_zh_CN.po 文件，将 msgstr 部分的翻译内容替换为你想要的语言：
+```po
+# file: messages_zh_CN.po
+msgid ""
+msgstr ""
+"Project-Id-Version: MyProject\n"
+"POT-Creation-Date: 2023-03-15 10:00+0800\n"
+"PO-Revision-Date: 2023-03-15 10:00+0800\n"
+"Last-Translator: Your Name <your_email@example.com>\n"
+"Language-Team: your_language <your_language@example.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Hello, world!"
+msgstr "你好，世界！"
+```
+
+#### 更新 PO 文件
+使用 msgmerge 命令将原始的 PO 文件与翻译文件合并：
+```shell
+msgmerge -U messages_zh_CN.po messages.po
+```
+#### 生成 MO 文件
+使用 msgfmt 命令将 PO 文件转换为 MO（Machine Object）文件：
+```shell
+msgfmt -o messages_zh_CN.mo messages_zh_CN.po
+```
