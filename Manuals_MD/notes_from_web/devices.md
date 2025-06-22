@@ -50,15 +50,41 @@ Arduino Uno开发板可以使用三种方式供电：
 
 [mirrors / marlinfirmware / marlin · GitCode](https://gitcode.net/mirrors/marlinfirmware/marlin?utm_source=csdn_github_accelerator)
 
-# 电机与电机驱动
+# 电机与电机拖动
+## 电机分类
+[步进电机与直流电机（有刷无刷）的优缺点，与伺服电机区别](https://blog.csdn.net/chenhuanqiangnihao/article/details/124328416)
+![alt text](elements/devices/441539a0e7098deaca83c560f1a9e1d1.png)
+![alt text](elements/devices/0df431adcbef7609b9eca5bdcc5034c17dd99e4c.webp)
+### 直流电机 DC Motor
 
-## 步进电机
-
-#### 42步进电机
-
+#### 步进电机（STEP）
+##### 42步进电机
 [(13条消息) A4988与42步进电机_墨羽羔羊的博客-CSDN博客](https://blog.csdn.net/weixin_44922452/article/details/98094063)
 
 [TMC2208与A4988步进电机驱动对比分析 - 简书 (jianshu.com)](https://www.jianshu.com/p/33f3f44b7840)
+
+#### 直流无刷电机（BLDC）
+也可以叫电子换向直流电机，反电势为梯形波，定子电流为矩形波，一般定子为集中整距绕组。
+无刷电机，也被称为直流无刷电机，是一种通过电子控制器来驱动转子的电机。“BL”意为“无刷”，就是DC电机中的“电刷”没有了。与传统的直流电机相比，无刷电机不需要使用碳刷和电刷来实现转子的换向。这种设计使得无刷电机具有更高的效率和更长的寿命。无刷电机的优点之一是它们产生的噪音较低。这使得它们非常适合用于需要安静操作的应用，如医疗设备和办公设备。此外，无刷电机还具有较高的转速范围和较高的功率密度，使其在汽车、航空航天和工业机械等领域中得到广泛应用。
+原来无刷电机采用永磁体来做转子，转子里是没有线圈的。由于转子里没有线圈，所以不需要用于通电的换向器和电刷。取而代之的是作为定子的线圈。
+
+### 交流电机 AC Motor
+#### 永磁同步电机（PMSM）
+反电势和定子电流均为正弦波，一般定子为短距分布绕组等等等
+因为永磁同步电机的转子旋转速度，与定子线圈产生的磁场变化速度保值同步，所以这种电机被称之为“永磁同步电机”
+![alt text](elements/devices/dd16284a6c81cb72d2f058555129fcec.png)
+#### 单向电机
+#### 双向电机
+
+## 电机控制
+### FOC（Field-Oriented Control）
+直译是磁场定向控制，也被称作矢量控制 （VC，Vector Control） ，是目前无刷直流电机（BLDC）和永磁同步电机（PMSM）高效控制的最优方法之一。FOC旨在通过精确地控制磁场大小与方向，使得电机的运动转矩平稳、噪声小、效率高，并且具有高速的动态响应。
+
+简单来说就是，FOC是一种对无刷电机的驱动控制方法，它可以让我们对无刷电机进行 “像素级” 控制，实现很多传统电机控制方法所无法达到的效果。
+[电机系列（1） - foc最基本原理、clark变换 、park变换、附代码](https://blog.csdn.net/K_O_R_K/article/details/123546950)
+[FOC?看这篇文章就够了](https://zhuanlan.zhihu.com/p/364247816)
+
+项目分享：[刘祥/FOC教程](https://gitee.com/wojialaomuzhu/foc-tutorial)
 
 # 传感器
 
@@ -129,7 +155,7 @@ TOF 系统是一种光雷达系统，可从发射极向对象发射光脉冲，�
 
 虽然，微软标准该产品深度相机的测量范围是0-4.5米，但是实际上可以测量到10米，9.5处误差在0.05米，或者更低。以前用过奥比的深度传感器，虽然标准8米但是实际根本用不了8米那，在8米处误差非常大。另外产品深度相机的像素高达100万，目前已知世界上最高像素的tof深度相机，像素也是最小的，效果非常好。
 
-#### 安装使用
+##### 安装使用
 
 ```bash
 sudo apt-get install ros-indigo-freenect-launch
@@ -213,5 +239,6 @@ sc config i8042prt start= auto  # 启用笔记本自带的键盘way1
 sc config i8042prt start= demand  # 启用笔记本自带的键盘way2
 ```
 
-
-
+# 网络设备
+## 路由器
+### mikrotik

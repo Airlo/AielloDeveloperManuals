@@ -266,6 +266,25 @@ PWM信号用于直流电机的速度控制，调光LED等。
 
 ![143811z4tggsgssg9gslyt](./elements/143811z4tggsgssg9gslyt.png)
 
+## 现代控制理论
+
+## 机器人控制
+
+### FK和IK
+[前向运动学（FK）和逆向运动学 (IK)](https://blog.csdn.net/weixin_43673156/article/details/148372920)
+[MuJoCo入门篇08. 运动规划FK & IK](https://zhuanlan.zhihu.com/p/705884059)
+[【游戏开发】逆向运动学（IK）详解](https://zhuanlan.zhihu.com/p/499405167)
+正向运动学（Forward kinematics, FK）：利用机器人运动学方程，根据关节的特定参数计算末端受动器（end effector）的位置。正向运动学要求用户为所有涉及的关节设置参数。
+
+逆向运动学（Inverse kinematics, IK）：流程与FK相反，利用机器人运动学方程来确定机械手的关节参数，使末端受动器移动到期望的位置。末端受动器可以是关节（如手和脚），也可以是内部关节（如手肘和膝盖），不一定位于末端。IK最早出现在机器人学技术中，现在在许多领域都有应用，比如：工程学、计算机图形学、电子游戏、CG动画。
+
+关于末端受动器：机械手臂抓取末端受动器的位置、角色开门时手的位置、角色行走时脚的位置，这些可以称为末端受动器。
+
+### 全身控制 WBC
+
+### 机器人仿真平台对比
+[对比表](../notes_convi_aux_files/comparsion_of_robotics_sim_platfrom.xlsx)
+
 ## 网络常识
 
 #### OSI七层模型
@@ -551,6 +570,10 @@ XML+XSD、SOAP、WSDL就是构成 WebService 平台的三大技术。
 #### Apriori算法
 
 [Apriori算法介绍（Python实现） - llhthinker - 博客园 (cnblogs.com)](https://www.cnblogs.com/llhthinker/p/6719779.html)
+
+### 强化学习
+常用的深度强化学习算法：
+DQN、DDPG、A3C等
 
 ## 移动机器人算法
 

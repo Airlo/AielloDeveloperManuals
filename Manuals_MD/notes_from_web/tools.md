@@ -1033,9 +1033,75 @@ RUN apt-get update
 
 [(12条消息) RoboWare Studio安装教程_嵙杰的博客-CSDN博客_roboware studio](https://blog.csdn.net/lixujie666/article/details/80139112)
 
-# RVIZ
+# 机器人仿真器
+[Webots、Mujoco……机器人仿真软件哪家强？](https://www.eeworld.com.cn/robot/eic691307.html)
+[物理引擎实现：Gazebo/MuJoCo/PyBullet/DART/Webots/Isaac Gym](https://zhuanlan.zhihu.com/p/851306343)
+其实分成了两个技术路线：
+
+* 牛顿-欧拉法+显示求解器路线：Isaac Gym（NVIDIA PhysX）、Webots、Bullet
+* 拉格朗日动力学+隐式求解器路线：Simbody、DART
+## RVIZ
 
 [(13条消息) ROS学习笔记(八)::RVIZ::Interactive Markers: Writing a Simple Interactive Marker Server_西西刘的博客-CSDN博客](https://blog.csdn.net/u011104647/article/details/50424687)
+
+## Gazebo
+官网：https://gazebosim.org/home
+
+官方文档：https://gazebosim.org/docs/latest/getstarted/
+
+教程：https://classic.gazebosim.org/tutorials
+
+Gazebo是强大的开源机器人仿真工具，它提供了一个逼真的物理仿真环境，可以模拟各种机器人和传感器的行为，是关注复杂场景和室外环境的研究人员的首选工具。虽然Gazebo是独立的机器人仿真软件，支持开源ODE，Bullet物理引擎，但实际使用中，Gazebo通常与ROS深度绑定。尤其在SLAM领域，ROS+Gazebo难以替代。
+
+在性能上，Gazebo支持使用多个服务器来提高性能，可以自动加载和卸载仿真资产，从而显著提高性能，同时可以控制仿真时间步长。在集成方面，Gazebo支持跨平台集成，也支持云集成，同时也支持ROS集成。其拥有丰富的机器人模型和环境模型库，方便用户直接使用或修改。即支持多种移动机器人、机械臂、无人机等机器人模型，也可以自定义机器人模型，设置关节、传感器、控制器等。支持多种传感器的仿真，如激光雷达（LiDAR）、摄像头、IMU、GPS 等。传感器数据可以实时获取，用于机器人导航、定位、避障等任务使用物理引擎（如 ODE、Bullet、DART）来模拟真实世界中的物理现象，包括重力、摩擦、碰撞等。支持复杂的物理交互，可以模拟机器人与环境之间的相互作用。
+
+Gazebo缺点在于其编辑器还是不太友好，既不直观也不方便，仿真场景的编辑也需要URDF文件，而且只在原生的Linux系统下有比较好的体验，在Windows下使用不便。
+
+## Webots
+官网：https://cyberbotics.com/
+
+GitHub地址:https://github.com/cyberbotics/webots
+
+官方文档：https://cyberbotics.com/doc/guide/index
+
+Webots 是一个开源、跨平台的3D机器人仿真软件，拥有高性能的物理仿真引擎和强大的开发环境。它最初是作为研究移动机器人中各种控制算法的研究工具开发的。自2018年12 月起，Webots在Apache 2.0许可下作为开源软件发布。它支持对多种机器人行为的建模与仿真，如导航、路径规划、多机器人协作等。
+
+Webots特点体现在全方位的仿真能力和灵活开发接口上。Webots 使用 Open Dynamics Engine (ODE) 提供精确的物理模拟，包括碰撞检测、摩擦力模拟以及刚体动力学计算；支持激光雷达、IMU、GPS、摄像头等多种传感器，同时可模拟执行器如轮式、关节式电机等；用户可通过 Webots 内置的 PROTO 文件定义复杂的机器人和环境模型；支持实时仿真和离线数据分析，便于算法开发和测试；通过Webots ROS 2插件支持与ROS通信。
+
+多年来，许多机器人项目在以下领域都依赖 Webots：
+
+移动机器人原型设计（学术研究、汽车工业、航空、真空吸尘器行业、玩具行业、业余爱好者等）
+
+机器人运动研究（有腿机器人、类人机器人、四足机器人等）
+
+多智能体研究（群体智能、协作移动机器人组等）
+
+适应性行为研究（遗传算法、神经网络、人工智能等）
+
+机器人教学（机器人讲座、C/C++/Java/Python编程讲座等）
+
+机器人竞赛（例如Robotstadium或Rat's Life）
+
+## Mujoco
+官网：https://mujoco.org/
+
+GitHub地址：https://github.com/google-deepmind/mujoco
+
+官方文档：https://mujoco.readthedocs.io/en/stable/overview.html
+
+Mujoco是完全开源的仿真多体动力学的物理引擎，其主要特点是接触动力学，这一点从其名字上就可以看出：MuJoCo stands for Multi-Joint dynamics with Contact。由于Mujoco只是物理引擎，相比于集成了许多额外功能的CoppeliaSim更加轻量化、专业化。
+
+Mujoco最初由Roboti LLC开发，于2021年10月被DeepMind收购并免费提供，并于5月开源2022. MuJoCo代码库。得益于DeepMind团队的加持，Mujoco常用于深度强化学习，在人形机器人，四足机械狗等复杂机器人的强化学习中应用广泛。
+
+在诸多的机器人仿真环境中，MuJoCo是在复杂动力学仿真上做得非常出色的一个，其提供的诸多接口便于配置强化学习环境，是学习机器人强化学习必不可少的工具。
+## Unity
+官方网站：https://microsoft.github.io/AirSim/
+
+Github地址：https://github.com/microsoft/AirSim
+
+Unity和Unreal Engine本身是游戏开发领域的代表，不过现在也已经扩展到机器人领域。提供高保真的可视化和物理效果，这对于机器人领域的VR和AR应用尤为有益。
+
+稚晖君就用Unity做过仿真。对于Unity而言，其拥有非常完备的物理特性，这对于机器人仿真是非常有用的。此外，Unity Robotics软件包带有许多现成的接口，能轻松与ROS或ROS 2的交换信息。
 
 # TeamViewer
 
@@ -1608,10 +1674,6 @@ rm -rf ~/.cache/thumbnails/*  # 可选,清除缩略图缓存
 ```shell
 sudo apt install ubuntu-restricted-extras gstreamer1.0-libav gstreamer1.0-plugins-good  # 安装支持的视频解码库（如 GStreamer 插件）
 ```
-
-
-
-# Mujoco
 
 # Nginx
 

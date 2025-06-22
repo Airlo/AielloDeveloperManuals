@@ -954,7 +954,24 @@ TensorRT是nvidia家的一款高性能深度学习**推理SDK**。此SDK包含�
 [Installation Guide :: NVIDIA Deep Learning TensorRT Documentation](https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html)
 
 [(28条消息) 乌班图 18.04 tensorRT安装踩坑_代码大萝卜的博客-CSDN博客](https://blog.csdn.net/ws18921818762/article/details/103006076)
+## 机器人仿真与运动控制
+### MIT Cheetah
+[MIT Cheetah 2019 WBC 学习](https://zhuanlan.zhihu.com/p/455119329)
+[WBC理论及Openloong人形WBC代码详解](https://blog.csdn.net/weixin_41826102/article/details/145949355)
+[WBC(全身控制)](https://zhuanlan.zhihu.com/p/623700212)
+MIT Cheetah是目前开源四足中效果最好，开源最彻底，资料最多的工程项目，其开源项目Cheetah-Software 包含了控制代码，硬件电路图与仿真平台。目前的控制方案中已更新到MPC+WBIC的最新版本。
 
+MPC+WBIC方案是由Donghyun Kim提出，记载在论文Highly Dynamic Quadruped Locomotion via Whole-Body Impulse Control and Model Predictive Control[^1]中并将应用在Mini-Cheetah上使得其跑出了3.7m/s的高速度。在其博士论文[^2]中还将该方案应用在双足机器人中，取得了很好的效果。
+### 动力学库
+[机器人动力学库哪个更好？](https://www.zhihu.com/question/437857717)
+首选是Pinocchio,Drake, MuJoCo。它们都是积极开发的现代框架，使用 C++ 开发，但提供一流的 Python 绑定。您可能会看到的其他工具包括 Peter Corke 的Robotics Toolbox for Python和MATLAB Robotics System Toolbox。当然，所有这些工具都可以使用URDF文件，从而实现与实际设计的互操作性。
+
+作者：huyoust
+链接：https://www.zhihu.com/question/437857717/answer/1897953312235586570
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+#### pinocchio
+[动力学库pinocchio安装使用](https://zhuanlan.zhihu.com/p/543838138)
 ## Web
 ### OpenSSL
 补回头文件和库文件
