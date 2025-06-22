@@ -10,14 +10,22 @@
 
 I2C通信是一种同步串行通信方式，它有两根双向信号线。一根是数据线SDA（serial data I/O），另一根是时钟线SCL（serial clock）。IIC总线上可以挂多个器件，而每个器件都有唯一的地址，这样可以标识通信目标。数据的通信的方式采用主从方式，主机负责主动联系从机，而从机则被动回应数据。
 ## 图形化
+
+
 ### X.Org
+
+![alt text](20210205113128249.png)
+
+![X server 会怎么做？](x-architecture.png)
+
+![Wayland 会怎么做？](wayland-architecture.png)
 ### Wayland
 Wayland是一个现代的窗口系统协议，最早由 Red Hat 的开发者 Kristian Høgsberg 于 2008 年提出，旨在取代老旧的 X11（X.Org），提供更流畅的图形性能、更好的安全性，并减少不必要的中间层。
 与X11不同，Wayland采用了全新的设计，它使用了更简单、更现代的协议和技术，可以提供更好的性能和安全性，并能更好地支持现代图形硬件。
 自从 Fedora 25 在 2016 年大胆地默认引入 Wayland 图形堆栈以来，它已作为多个 Linux 发行版的主要选项安装。如今，Wayland 已成为 Debian、Ubuntu、Fedora 和 Arch 等主流发行版的默认显示服务器，GNOME 和 KDE 也已经全面支持 Wayland。然而，尽管默认使用 Wayland 的桌面环境越来越多，许多应用程序仍然依赖 X11 旧有的 API，导致一些用户仍然对 Wayland 持观望态度。
 您甚至可能现在就在使用它！您可以通过打开终端并输入 echo $XDG_SESSION_TYPE 轻松检查这一点。
 如果您运行的是 GNOME，则无需执行任何操作，因为您的显示管理器 (GDM) 默认支持它。
-
+![alt text](v2-47d1fc69bb67a5c739aebda4ab8fa19f_1440w.png)
 ##### 什么是Wayland
 为了在屏幕上显示窗口并正确绘制其中的每个元素，Linux 需要一种与图形硬件和显示器进行通信的方法。从 1984 年到 2016 年，大多数发行版都使用称为“X 窗口系统核心协议”（或简称 X）的显示协议。 Wayland 出现在这一时期的末期，提供了一种更轻、更安全、更适合现代显示技术的替代方案。
 
@@ -46,6 +54,8 @@ X与Wayland的主要差异，就是X系统中存在一个X服务器（通常用�
 Wayland取代X的进度已经完成很多，所有流行的用户界面库都已经支持Wayland，对于一些不支持Wayland的程序，解决方案是用一个运行在Wayland中的X服务器XWayland来兼容。对Wayland支持最激进的桌面是GNOME，多年前他就默认向用户提供Wayland会话，而KDE虽然也提供了Wayland会话，但是默认选择的还是X11。虽然Wayland协议还在发展，一些在X11中已经完善的特性Wayland还没有补全，但是Wayland也有一些X11不支持的功能，比如GNOME桌面的触摸板手势。
 
 客户端应用需要移植到 Wayland 协议，或使用具有 Wayland 后端（如 GTK）的图形工具包，以便能够与基于 Wayland 的合成器和显示服务器原生工作。
+
+![alt text](v2-88bf8ef0aa4dc6b8a30dc5d2e0b79601_r.png)
 
 [X 和 Wayland 的主要区别](https://sh.alynx.one/posts/Difference-between-X-and-Wayland/)
 [X 中的混成器與 Composite 擴展](https://farseerfc.me/compositor-in-X-and-compositext.html)
@@ -267,7 +277,12 @@ PWM信号用于直流电机的速度控制，调光LED等。
 ![143811z4tggsgssg9gslyt](./elements/143811z4tggsgssg9gslyt.png)
 
 ## 现代控制理论
+也就指的是“如何将机器中的信息与大脑或者神经系统联系起来”的学说
+cybernetics 希腊语cybernétique，最早可以在柏拉图的著作《理想国》中，指的是：the study of self-governance，也就是“自治政府”的意思。
 
+在维纳的著作中，它所代表的含义是：动物或者机器的沟通与控制，所局限的研究对象不仅仅是机器，也包括动物，同时其研究兴趣不仅仅在控制也包括了沟通（通讯）。而且更有意思的是，它不仅仅是机器与机器，还包括机器与动物之间的沟通和交流。
+[控制理论（control theory）和控制论（cybernetic）是同一个东西吗，有什么区别?](https://www.zhihu.com/question/434383360)
+![Cyber-Physical: the Nature of "Controls"](Screenshot_20211208_172051_tv.danmaku.bili.jpg)
 ## 机器人控制
 
 ### FK和IK
@@ -403,6 +418,25 @@ sun公司为了解决百家争鸣的现象指定一套规范，以后大家就�
 ##### 6. 网络中间件
 
 Tomcat
+
+### 常见网络IP与占用端口
+#### 服务器端口号
+* 80 网页引擎 Nginx 网页 TCP 端口
+* 5900 Ubuntu VNC 远程桌面 TCP 端口
+* 7860 Gradio 服务默认网页 TCP 端口
+* 8065 聊天服务 Mattermost 网页 TCP 端口
+* 8080 为知笔记 网页 TCP 端口
+* 8081 个人博客 Wordpress 网页 TCP 端口
+* 8082 数据库控制台 phpmyadmin 网页 TCP 端口
+* 8083 在线书库 calibre-web 网页 TCP 端
+* 8096 媒体服务器 Jellyfin 网页 TCP 端口
+* 9091 远程下载 Transmission Web 管理 TCP 端口
+* 9269 为知笔记 数据同步 UDP 端口
+* 9443 Docker控制台 Protainer 网页 TCP 端口
+* 19132 我的世界 基岩版服务器 UDP 端口
+* 25565 我的世界 JAVA 版服务器 TCP 端口
+* 32400 媒体服务器 Plex 网页 TCP 端口
+
 
 ## 分布式系统通讯
 
@@ -600,7 +634,6 @@ DQN、DDPG、A3C等
 [深入理解图优化与g2o：图优化篇 - 半闲居士 - 博客园 (cnblogs.com)](https://www.cnblogs.com/gaoxiang12/p/5244828.html)
 
 ### 路径规划
-
 [ROS探索总结（十四）—— move_base（路径规划） - 古月居 (guyuehome.com)](https://www.guyuehome.com/270)
 
 [(12条消息) 【规划】RRT*算法图解_笑扬轩逸的博客-CSDN博客_rrt*算法](https://blog.csdn.net/yuxuan20062007/article/details/88843690)
@@ -612,6 +645,15 @@ DQN、DDPG、A3C等
 [(28条消息) 【python+ROS+路径规划】四、发布路径_ros 发布path_薯一个蜂蜜牛奶味的愿的博客-CSDN博客](https://blog.csdn.net/w_w_y/article/details/122748862)
 
 [(28条消息) 【python+ROS+路径规划】二、理解并处理地图数据_薯一个蜂蜜牛奶味的愿的博客-CSDN博客](https://blog.csdn.net/w_w_y/article/details/122736739)
+
+![Nav Core](v2-88bf8ef0aa4dc6b8a30dc5d2e0b79601_r-1.png)
+
+#### 代价地图
+![地图层](20200201191858626.png)
+![内部主要类](16588463485510.png)
+![alt text](20200202164903843.png)
+![alt text](20200202230758394.png)
+![alt text](20200307192116169.png)
 
 ### 定位与感知
 
@@ -632,12 +674,28 @@ DQN、DDPG、A3C等
 [(28条消息) 激光SLAM导航系列(五)局部路径规划_基于slam地图的路径规划_月黑风高云游诗人的博客-CSDN博客](https://blog.csdn.net/lqygame/article/details/72861439)
 
 #### TEB
+开源于 technische universitat dortmund (rstu)
+![alt text](Screenshot_20220727_065833_com.microsoft.emmx.jpg)
 
 [(12条消息) TEB局部路径规划 computeVelocityCommands代码解析_COCO_PEAK_NOODLE的博客-CSDN博客](https://blog.csdn.net/windxf/article/details/110039280)
 
 [网上收集关于Teb Local Planner的调试使用 - 古月居 (guyuehome.com)](https://www.guyuehome.com/34465)
 
 [(28条消息) 局部路径规划器teb_local_planner详解1：初识TEB_teb local planner 解读_little_miya的博客-CSDN博客](https://blog.csdn.net/allenhsu6/article/details/113057538)
+
+Features:
+* Online trajectory optimization
+* Objective: reach goal in minimal time
+* Kinodynamic constraints (maximum velocities, accelerations)
+* Non-holonomic kinematics
+* Alternative trajectories in distinctive topologies
+* Supports forward and backwards driving
+
+What's next?
+Extension: Parallel Planning in distinctive Topologies
+* Drawback of optimizing a single trajectory: stucking to a locally optimal trajectory
+* Explore and maintain a set of alternative trajectories
+* Select current globally optimal trajectory from the set for navigation
 
 ### 传感器数据处理与融合
 
