@@ -1,13 +1,13 @@
 [Unit]
-Description=Mdbook Service
+Description=ADM Manuals_MD Service
 After=network.target
 
 [Service]
 Type=simple
-User=comac-pan
+User=robot
 Restart=on-failure
 RestartSec=5s
-ExecStart=/home/comac-pan/Developer_Manuals/computor-book/start_local_book.sh
+ExecStart=/home/robot/MyWorkSpace/AielloDeveloperManuals/Manuals_MD/start_local_book.sh
 
 [Install]
 WantedBy=multi-user.target

@@ -13,5 +13,5 @@ source $HOME/.cargo/env
 touch ${LOCALBOOK}
 # cd ${LOACLBOOK}
 
-mdbook serve ${LOCALBOOK} -n 0.0.0.0 -p 3000
+mdbook serve ${LOCALBOOK} -n 0.0.0.0 -p 3001
 exit 0
