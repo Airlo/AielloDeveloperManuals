@@ -866,6 +866,9 @@ git push origin --tags # 一次性推送全部尚未推送到远程的本地标�
 
 git config --global alias.xx xxx # 配置别名
 git unstage xxx.file # 配置别名过后，用于撤回暂存区的修改 alias.unstage=reset HEAD
+
+git patch  # 生成补丁（产出物料），以提供给其他开发人员
+git am  # 打补丁，将补丁打到自己的代码中（消化物料）
 ```
 
 **清除此前的提交记录**
@@ -896,8 +899,26 @@ git config --global https.proxy "https://127.0.0.1:1080"
 #### 安装启动与管理
 
 ```shell
+# Add Docker's official GPG key:
+sudo apt update
+sudo apt install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update
 # Install
-sudo apt install docker.io
+# sudo apt install docker.io
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 # 安装完成后可能需要启动
 sudo systemctl start docker
 ```
@@ -1022,7 +1043,12 @@ RUN apt-get update
 
 ```json
 {
-  "registry-mirrors": ["https://hx8dsaly.mirror.aliyuncs.com"],
+  "registry-mirrors": [
+    "https://hx8dsaly.mirror.aliyuncs.com",
+    "https://docker.1panel.live/",
+    "https://docker.nastool.de/",
+    "https://pee6w651.mirror.aliyuncs.com",
+    "https://registry.docker-cn.com"],
   "dns":["192.168.153.2","8.8.4.4"]
 }
 ```
@@ -1823,4 +1849,130 @@ msgmerge -U messages_zh_CN.po messages.po
 使用 msgfmt 命令将 PO 文件转换为 MO（Machine Object）文件：
 ```shell
 msgfmt -o messages_zh_CN.mo messages_zh_CN.po
+```
+
+# MMV
+
+## MMV 完整用法指南
+
+```shell
+# 安装 mmv
+sudo apt install mmv  # Ubuntu/Debian
+sudo yum install mmv  # CentOS/RHEL
+
+# 批量添加前缀
+mmv "*.flac" "Disc1_#1.flac"
+
+# 将错误的 Disc1_ 改回 Disc2_
+mmv "Disc1_*" "Disc2_#1"
+```
+
+### 基本语法
+```bash
+mmv "源模式" "目标模式"
+```
+
+### 1. **通配符使用**
+- `*` - 匹配任意字符
+- `?` - 匹配单个字符
+- `[...]` - 字符组匹配
+
+### 2. **常用模式示例**
+
+```bash
+# 添加前缀
+mmv "*" "Prefix_#1"
+
+# 添加后缀
+mmv "*" "#1_suffix"
+
+# 替换部分文本
+mmv "OldName*" "NewName#1"
+
+# 改变扩展名
+mmv "*.txt" "#1.doc"
+
+# 数字重命名
+mmv "File*" "NewFile#1"
+```
+
+### 3. **多个通配符**
+```bash
+# 两个通配符
+mmv "Part1*Part2*" "New#1_#2"
+
+# 实际示例：重组文件名
+mmv "Artist-*-Album-*" "#2-#1"
+```
+
+### 预防性检查命令
+```bash
+# 在执行前先预览结果（使用 -n 或 --no-act 选项）
+mmv -n "Disc1_*" "Disc2_#1"
+
+# 查看当前目录的文件结构
+find . -name "Disc*" -type f | head -10
+```
+
+## 更安全的批量重命名工作流
+
+### 1. **创建测试脚本**
+```bash
+#!/bin/bash
+# safe_rename.sh
+
+SRC_DIR="/path/to/your/music"
+cd "$SRC_DIR"
+
+echo "=== 当前文件列表 ==="
+find . -name "Disc*_*" -type f | sort
+
+echo -e "\n=== 预览重命名结果 ==="
+for disc_dir in disc*; do
+    if [ -d "$disc_dir" ]; then
+        disc_num=$(echo "$disc_dir" | grep -o '[0-9]\+')
+        echo "处理目录: $disc_dir -> Disc${disc_num}_"
+        cd "$disc_dir"
+        mmv -n "Disc1_*" "Disc${disc_num}_#1"
+        cd ..
+    fi
+done
+
+read -p "确认执行重命名？(y/n): " confirm
+if [ "$confirm" = "y" ]; then
+    for disc_dir in disc*; do
+        if [ -d "$disc_dir" ]; then
+            disc_num=$(echo "$disc_dir" | grep -o '[0-9]\+')
+            cd "$disc_dir"
+            mmv "Disc1_*" "Disc${disc_num}_#1"
+            cd ..
+        fi
+    done
+    echo "重命名完成！"
+fi
+```
+
+### 2. **使用更精确的模式匹配**
+```bash
+# 只匹配音频文件
+mmv "Disc1_*.flac" "Disc2_#1.flac"
+mmv "Disc1_*.mp3" "Disc2_#1.mp3"
+
+# 同时处理多种格式
+for ext in flac mp3 m4a wav; do
+    mmv "Disc1_*.${ext}" "Disc2_#1.${ext}"
+done
+```
+
+## 其他有用的 MMV 选项
+
+```bash
+# 递归处理子目录
+find . -name "Disc1_*" -exec mmv "{}" "#1/Disc2_#2" \;
+
+# 详细输出
+mmv -v "Disc1_*" "Disc2_#1"
+
+# 处理包含空格的文件名
+mmv "*\ *" "#1_#2"
 ```
