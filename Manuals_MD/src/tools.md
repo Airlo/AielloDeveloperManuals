@@ -1556,12 +1556,29 @@ export QT_IM_MODULE=fcitx
 # 图形化配置
 fcitx5-configtool
 ```
+
+将下载的皮肤包，解压到~/.local/share/fcitx5/themes文件夹下面
+然后在输入法配置中 附加组件 选择对应的主题即可
+启用图中的单行模式需要打开配置界面->附加组件->拼音（后边的小齿轮）->勾选在程序中显示预编辑文本
+fcitx5对emoji表情符号也有比较不错的支持，大家可以安装以下字体来使用好看的emoji符号
+sudo apt install fonts-noto-color-emoji
+安装成功后打开配置界面->附加组件->拼音（后边的小齿轮）->勾选启用颜文字
+安装云拼音模块
+sudo apt install fcitx5-module-cloudpinyin
+
 5. 一些bug
 edge浏览器中可能无法使用Fcitx5输入中文，和wayland有关
+sudo apt install fcitx5-frontend-gtk4
 ```
 使用中发现edge浏览器字体模糊发虚，一度以为自己眼睛老化了（确实有点老花了）。网上搜了一下，说是要在Exec后面加--ozone-platform=wayland。
 加了以后注销重新登录，edge字体清晰了，但又发现fcitx5-pinyin无法在edge浏览器中输入汉字了！又是网上一通搜，找到了解决方案，在Exec后面再加上--gtk-version=4，重启后，拼音输入也正常了，说明fcitx5、wayland与应用之间还需要时间磨合。(2024-11-30)
 ```
+wps 中
+Exec=env XMODIFIERS="@im=fcitx" GTK_IM_MODULE="fcitx" QT_IM_MODULE="fcitx" SDL_IM_MODULE=fcitx /usr/bin/wps %F
+对于特定软件，还可以试试在Exec后
+--ozone-platform=wayland --gtk-version=4 
+或是再加
+--enable-features=UseOzonePlatform
 # Wireshark 
 ```shell
 # 添加wireshark用户组

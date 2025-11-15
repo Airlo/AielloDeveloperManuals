@@ -129,13 +129,29 @@ network:
           auth:
             key-management: psk
             password: "Your PassWord"
-      dhcp4: yes      
-      optional: true    
+      dhcp4: yes
+      # dhcp4: no
+      # addresses: [192.168.0.100/24]
+      # nameservers:
+      #   addresses: [114.114.114.114, 8.8.8.8]   
+      optional: true
+  bridges:
+    br0:
+      addresses: [ 192.168.205.26/24 ]
+      routes:
+        - to: default
+          via: 192.168.205.1
+      mtu: 1500
+      nameservers:
+          addresses: [8.8.8.8]
+      interfaces:
+        - ens19    
 ```
 ```shell 
 sudo netplan apply
 ```
-
+##### VLAN和网桥
+https://cn.linux-console.net/?p=20518
 #### pam.d
 
 #### init.d
